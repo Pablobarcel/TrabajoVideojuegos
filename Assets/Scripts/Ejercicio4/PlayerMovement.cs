@@ -32,5 +32,23 @@ public class PlayerMovement : MonoBehaviour
         }
 
     }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        // Obtener la masa del objeto con el que colisiona
+        Rigidbody otherRb = collision.rigidbody;
+
+        if (otherRb != null)
+        {
+            float massDifference = otherRb.mass / rb.mass; // Relación de masas
+            Vector3 impactForce = collision.relativeVelocity * otherRb.mass * 0.5f; // Calcula la fuerza del impacto
+
+            // Si el objeto que golpea es más pesado, el player reacciona más
+            if (massDifference >= 1)
+            {
+                rb.AddForce(impactForce, ForceMode.Force); // Desplazamiento realista
+            }
+        }
+    }
 }
  
