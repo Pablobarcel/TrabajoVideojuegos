@@ -2,53 +2,35 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 5f; //Velocidad del jugador
-    private Rigidbody rb; //Rigidbody
+    public float moveSpeed = 5f; // Velocidad del jugador
+    public float rotationSpeed = 10f; // Velocidad de rotación suave
+
+    private Rigidbody rb;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>(); //Obtener el Rigidbody
-        if (rb == null)
-        {
-            Debug.LogError("No se encontró un Rigidbody en " + gameObject.name);
-        }
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
     {
-        //Obtener entrada del teclado
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
 
-        //Crear dirección de movimiento
-        Vector3 moveDirection = new Vector3(moveX, 0, moveZ).normalized; //Creamos vector normalizado de movimiento para la direccion
+        // Dirección en espacio local del jugador
+        Vector3 moveDirection = new Vector3(moveX, 0, moveZ).normalized;
 
-        //Aplicar movimiento
-        rb.linearVelocity = new Vector3(moveDirection.x * moveSpeed, rb.linearVelocity.y, moveDirection.z * moveSpeed);
-
-        if (moveDirection != Vector3.zero)
+        if (moveDirection.magnitude > 0.1f) // Evitar rotaciones innecesarias
         {
-            transform.forward = moveDirection; //Hace que el Player gire en la direccion del movimiento
-        }
+            // Convertir dirección a coordenadas globales
+            Vector3 worldDirection = transform.TransformDirection(moveDirection);
 
-    }
+            // Aplicar movimiento
+            rb.linearVelocity = new Vector3(worldDirection.x * moveSpeed, rb.linearVelocity.y, worldDirection.z * moveSpeed);
 
-    void OnCollisionEnter(Collision collision)
-    {
-        // Obtener la masa del objeto con el que colisiona
-        Rigidbody otherRb = collision.rigidbody;
-
-        if (otherRb != null)
-        {
-            float massDifference = otherRb.mass / rb.mass; // Relación de masas
-            Vector3 impactForce = collision.relativeVelocity * otherRb.mass * 0.5f; // Calcula la fuerza del impacto
-
-            // Si el objeto que golpea es más pesado, el player reacciona más
-            if (massDifference >= 1)
-            {
-                rb.AddForce(impactForce, ForceMode.Force); // Desplazamiento realista
-            }
+            // 🔥 Aplicar rotación suave con Lerp
+            Quaternion targetRotation = Quaternion.LookRotation(worldDirection);
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         }
     }
 }
- 

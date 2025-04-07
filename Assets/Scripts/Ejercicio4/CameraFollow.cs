@@ -2,21 +2,21 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform player; //Jugador
-    public Vector3 offset = new Vector3(0, 3, -5); //Camara detras del jugador
-    public float smoothSpeed = 5f; //Fluidez de la camara
+    public Transform player;
+    public Vector3 offset = new Vector3(0, 3, -5);
+    public float smoothSpeed = 5f;
 
     void LateUpdate()
     {
-        if (player == null) return; //si no encuentra objeto player
+        if (player == null) return;
 
-        //Calcular la posicion deseada
-        Vector3 desiredPosition = player.position + offset;
+        // La cámara se coloca detrás del jugador, respetando su rotación
+        Vector3 desiredPosition = player.position + player.TransformDirection(offset);
 
-        //Interpolar suavemente la posicion de la camara
+        // Movimiento suave
         transform.position = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
 
-        //Camara mira siempre al jugador
+        // Mantiene la cámara mirando al jugador
         transform.LookAt(player);
     }
 }
