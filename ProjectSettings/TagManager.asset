@@ -13,10 +13,10 @@ TagManager:
   - UI
   - Bolas_fantasma
   - suelo
-  - 
-  - 
-  - 
-  - 
+  - enemies
+  - InvisibleToEnemies
+  - Wall
+  - pinchos
   - 
   - 
   - 
