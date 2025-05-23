@@ -6,8 +6,20 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Ejercicio4/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/Luminis/MainMenu.unity
+    guid: 3e211ffe059d5c04bbc441fa300eee5a
+  - enabled: 1
+    path: Assets/Scenes/Luminis/NameInput.unity
+    guid: 5176a940d0fb995419ad9801db373e8a
+  - enabled: 1
+    path: Assets/Scenes/Luminis/Luminis_Scene.unity
+    guid: 378fb57b1122a8f409458e42fb0bfaa4
+  - enabled: 1
+    path: Assets/Scenes/Luminis/GameStart.unity
+    guid: a51025ea51a7bc646ac8157ac45b260f
+  - enabled: 1
+    path: Assets/Scenes/Luminis/LoadGame.unity
+    guid: 99f95385923bf4c49969dd19adc4c343
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
