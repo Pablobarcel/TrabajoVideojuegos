@@ -125,4 +125,13 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = Mathf.Clamp(Mathf.RoundToInt(newMaxHealth * healthRatio), 1, newMaxHealth);
         ui?.UpdateVida(currentHealth);
     }
+
+    public void Heal(int amount)
+    {
+        currentHealth += amount;
+        currentHealth = Mathf.Min(currentHealth, playerStats.ActiveStats.vidas);
+        ui?.UpdateVida(currentHealth);
+    }
+
+
 }

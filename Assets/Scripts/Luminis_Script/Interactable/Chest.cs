@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class Chest : MonoBehaviour, IInteractable
 {
-    public ChestReward reward; // ScriptableObject con la recompensa
+    public ChestReward reward;
     private bool isOpened = false;
     public Color openedColor = Color.gray;
 
-    public GameObject coinPrefab; // Asignar desde el inspector
-    public Transform spawnPoint;  // Desde dónde salen las monedas (puede ser el mismo cofre)
-    public float spread = 0.5f;   // Para dispersión visual
-
+    public GameObject coinPrefab;
+    public GameObject healingItemPrefab;
+    public Transform spawnPoint;
+    public float spread = 0.5f;
 
     private Renderer rend;
 
@@ -23,16 +23,15 @@ public class Chest : MonoBehaviour, IInteractable
         if (isOpened || reward == null) return;
         isOpened = true;
 
-        // Spawnear monedas
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        // Soltar monedas
         if (player != null && coinPrefab != null)
         {
             for (int i = 0; i < reward.coinAmount; i++)
             {
-                // Posición aleatoria cercana
                 Vector3 offset = new Vector3(Random.Range(-spread, spread), 0.5f, Random.Range(-spread, spread));
                 GameObject coin = Instantiate(coinPrefab, spawnPoint.position + offset, Quaternion.identity);
-
                 Coin coinScript = coin.GetComponent<Coin>();
                 if (coinScript != null)
                 {
@@ -41,8 +40,21 @@ public class Chest : MonoBehaviour, IInteractable
             }
         }
 
+        // Soltar objetos de curación
+        if (healingItemPrefab != null)
+        {
+            for (int i = 0; i < reward.healingItemsToSpawn; i++)
+            {
+                Vector3 offset = new Vector3(Random.Range(-spread, spread), 0.5f,0);
+                GameObject heal = Instantiate(healingItemPrefab, spawnPoint.position + offset, Quaternion.identity);
+                HealingItem healScript = heal.GetComponent<HealingItem>();
+                if (healScript != null)
+                {
+                    healScript.SetHealing(reward.healingAmountPerItem);
+                }
+            }
+        }
 
-        // Cambiar color del cofre
         if (rend != null)
         {
             rend.material.color = openedColor;
