@@ -5,21 +5,41 @@ public class PlayerInteraction : MonoBehaviour
     public float interactRange = 2f;
     public KeyCode interactKey = KeyCode.F;
 
+    private InteractionPrompt interactionPrompt;
+    private IInteractable currentInteractable;
+
+    void Start()
+    {
+        interactionPrompt = FindObjectOfType<InteractionPrompt>();
+    }
+
     void Update()
     {
-        if (Input.GetKeyDown(interactKey))
+        CheckForInteractable();
+
+        if (Input.GetKeyDown(interactKey) && currentInteractable != null)
         {
-            Debug.Log("Tecla F pulsada");
-            Collider[] hits = Physics.OverlapSphere(transform.position, interactRange);
-            foreach (Collider hit in hits)
+            currentInteractable.Interact();
+        }
+    }
+
+    void CheckForInteractable()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, interactRange);
+        currentInteractable = null;
+
+        foreach (Collider hit in hits)
+        {
+            IInteractable interactable = hit.GetComponent<IInteractable>();
+            if (interactable != null)
             {
-                IInteractable interactable = hit.GetComponent<IInteractable>();
-                if (interactable != null)
-                {
-                    interactable.Interact();
-                    break; // Solo uno por tecla
-                }
+                currentInteractable = interactable;
+                interactionPrompt.ShowPrompt("'F' Interact");
+                return;
             }
         }
+
+        // Si no hay ninguno cerca, ocultar mensaje
+        interactionPrompt.HidePrompt();
     }
 }
