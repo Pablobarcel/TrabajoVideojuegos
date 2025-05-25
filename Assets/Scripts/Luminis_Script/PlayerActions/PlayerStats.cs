@@ -2,7 +2,12 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    public enum PlayerForm { Shadow, Light }
+    public enum PlayerForm
+    {
+        Light = 0,
+        Shadow = 1
+    }
+
     public PlayerForm currentForm = PlayerForm.Light;
 
     [Header("Referencias")]
@@ -42,8 +47,6 @@ public class PlayerStats : MonoBehaviour
         public int SpecialAttackFuryCost = 25;
 
         [Header("Visual Settings")]
-        public float scale = 1f;
-        public Color color = Color.white;
 
         [Header("Otros")]
         public int vidas = 3;
