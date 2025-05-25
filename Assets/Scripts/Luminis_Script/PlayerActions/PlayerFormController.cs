@@ -53,6 +53,7 @@ public class PlayerFormController : MonoBehaviour
                     Light = true;
                 }
                 CycleForm();
+                  
                 hasTransformed = true;
             }
             
