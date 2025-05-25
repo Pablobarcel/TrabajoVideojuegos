@@ -5,7 +5,8 @@ public class PlayerStats : MonoBehaviour
     public enum PlayerForm { Light , Shadow }
     public PlayerForm currentForm = PlayerForm.Light;
 
-    [Header("Form Change")]
+    [Header("Habilidades desbloqueadas")]
+    public bool dashUnlocked = false;
     public bool canChangeForm = false; // Por defecto no puede cambiar
 
     [Header("Referencias")]

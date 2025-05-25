@@ -53,4 +53,10 @@ public class EnemyCombatHandler : MonoBehaviour
             Destroy(transform.parent.gameObject);
         }
     }
+
+    public bool IsDead()
+    {
+        return isDead;
+    }
+
 }

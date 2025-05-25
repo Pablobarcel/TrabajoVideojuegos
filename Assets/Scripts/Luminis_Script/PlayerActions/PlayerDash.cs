@@ -28,6 +28,9 @@ public class PlayerDash : MonoBehaviour
     {
         if (playerStats == null) return;
 
+        // Si el dash no está desbloqueado, no hacemos nada
+        if (!playerStats.dashUnlocked) return;
+
         float dashForce = playerStats.ActiveStats.dashForce;
         float dashDuration = playerStats.ActiveStats.dashDuration;
         float dashCooldown = playerStats.ActiveStats.dashCooldown;
@@ -59,6 +62,7 @@ public class PlayerDash : MonoBehaviour
             }
         }
     }
+
 
     void StartDash(int direction, float dashForce, float dashDuration)
     {
