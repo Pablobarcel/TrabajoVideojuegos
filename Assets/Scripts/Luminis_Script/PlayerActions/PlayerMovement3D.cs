@@ -11,6 +11,9 @@ public class PlayerMovement3D : MonoBehaviour
     private PlayerWallJump wallJumpScript;
     private PlayerStats stats;
 
+    private Animator animator;
+    public static bool isFacingRight = true;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -24,6 +27,9 @@ public class PlayerMovement3D : MonoBehaviour
         {
             Debug.LogError("PlayerStats no encontrado en el jugador.");
         }
+
+        animator = GetComponent<Animator>();
+        isFacingRight = true;
     }
 
     void FixedUpdate()
@@ -36,7 +42,7 @@ public class PlayerMovement3D : MonoBehaviour
         velocity.x = move * moveSpeed;
         velocity.z = 0f;
 
-        // Si está deslizando por la pared, limitar la caída
+        // Wall sliding
         if (wallJumpScript.IsWallSliding && velocity.y < -wallSlideSpeed)
         {
             velocity.y = -wallSlideSpeed;
@@ -44,5 +50,30 @@ public class PlayerMovement3D : MonoBehaviour
         }
 
         rb.linearVelocity = velocity;
+
+        // Animator: activar o desactivar "IsWalking"
+        if (animator != null)
+        {
+            bool isWalking = Mathf.Abs(move) > 0.01f;
+            animator.SetBool("IsWalking", isWalking);
+        }
+
+        // Flip del personaje
+        if (move > 0 && !isFacingRight)
+        {
+            Flip();
+        }
+        else if (move < 0 && isFacingRight)
+        {
+            Flip();
+        }
+    }
+
+    void Flip()
+    {
+        isFacingRight = !isFacingRight;
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
     }
 }

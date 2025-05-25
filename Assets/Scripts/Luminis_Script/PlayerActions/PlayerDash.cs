@@ -3,20 +3,21 @@ using UnityEngine;
 public class PlayerDash : MonoBehaviour
 {
     [Header("Dash Settings")]
-    // Ya no asignamos valores fijos, los tomamos del PlayerStats dinámicamente
-
     private Rigidbody rb;
     private bool isDashing;
     private float dashEndTime;
     private float lastDashTime;
     private int dashDirection = 1; // -1 = izquierda, 1 = derecha
+    private Animator animator;
 
-    private PlayerStats playerStats; // Referencia a PlayerStats
+    private PlayerStats playerStats;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         playerStats = GetComponent<PlayerStats>();
+        animator = GetComponent<Animator>();
+
         if (playerStats == null)
         {
             Debug.LogError("PlayerStats component not found on the player object.");
@@ -27,7 +28,6 @@ public class PlayerDash : MonoBehaviour
     {
         if (playerStats == null) return;
 
-        // Tomamos las stats dinámicamente
         float dashForce = playerStats.ActiveStats.dashForce;
         float dashDuration = playerStats.ActiveStats.dashDuration;
         float dashCooldown = playerStats.ActiveStats.dashCooldown;
@@ -37,6 +37,10 @@ public class PlayerDash : MonoBehaviour
             if (Time.time >= dashEndTime)
             {
                 isDashing = false;
+                if (animator != null)
+                {
+                    animator.SetBool("IsDashing", false);
+                }
             }
             return;
         }
@@ -63,8 +67,13 @@ public class PlayerDash : MonoBehaviour
         lastDashTime = Time.time;
 
         Vector3 dashForceVector = new Vector3(direction * dashForce, 0f, 0f);
-        rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0); // Anular movimiento X antes del impulso
+        rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0); // Reset X velocity before applying force
         rb.AddForce(dashForceVector, ForceMode.VelocityChange);
         Debug.Log("DASH aplicado: " + dashForceVector);
+
+        if (animator != null)
+        {
+            animator.SetBool("IsDashing", true);
+        }
     }
 }

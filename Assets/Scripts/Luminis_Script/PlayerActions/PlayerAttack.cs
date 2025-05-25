@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class PlayerAttack : MonoBehaviour
     public Transform attackOrigin;
 
     public float hardAttackHoldTime = 1.5f;
+    public float weakAttackAnimTime = 0.5f;
+    public float heavyAttackAnimTime = 0.8f;
 
     private float hardAttackTimer = 0f;
     private bool isHoldingHardAttack = false;
@@ -18,18 +21,17 @@ public class PlayerAttack : MonoBehaviour
     private PlayerStats stats;
     private PlayerJump jumpScript;
     private Rigidbody rb;
+    private Animator animator;
 
     void Start()
     {
         stats = GetComponent<PlayerStats>();
         jumpScript = GetComponent<PlayerJump>();
         rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
 
-        if (stats == null)
-            Debug.LogError("PlayerStats no encontrado.");
-
-        if (jumpScript == null)
-            Debug.LogError("PlayerJump no encontrado.");
+        if (!stats) Debug.LogError("PlayerStats no encontrado.");
+        if (!jumpScript) Debug.LogError("PlayerJump no encontrado.");
     }
 
     void Update()
@@ -42,13 +44,14 @@ public class PlayerAttack : MonoBehaviour
 
         // Ataque normal
         if (Input.GetKeyDown(attackKey))
-            Attack();
+            StartCoroutine(Attack());
 
-        // Hard Attack
+        // Heavy Attack
         if (Input.GetKeyDown(hardAttackKey))
         {
             isHoldingHardAttack = true;
             hardAttackTimer = 0f;
+            animator.SetBool("Charging", true);
         }
 
         if (isHoldingHardAttack)
@@ -58,12 +61,14 @@ public class PlayerAttack : MonoBehaviour
             if (Input.GetKeyUp(hardAttackKey))
             {
                 isHoldingHardAttack = false;
+                animator.SetBool("Charging", false);
 
                 if (hardAttackTimer >= hardAttackHoldTime)
-                    HardAttack();
+                    StartCoroutine(HardAttack());
             }
         }
 
+        // Ataque especial
         if (Input.GetKeyDown(specialAttackKey) && !jumpScript.IsGrounded)
         {
             int furyCost = stats.ActiveStats.SpecialAttackFuryCost;
@@ -72,6 +77,7 @@ public class PlayerAttack : MonoBehaviour
             {
                 stats.ConsumeFuria(furyCost);
                 isPerformingSpecialAttack = true;
+                animator.SetBool("Fury", true);
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, stats.ActiveStats.SpecialAttackFallSpeed, 0f);
                 Debug.Log($"Ataque especial iniciado. Furia restante: {stats.GetFuriaActual()}");
             }
@@ -80,7 +86,6 @@ public class PlayerAttack : MonoBehaviour
                 Debug.Log("No tienes suficiente furia para usar el ataque especial.");
             }
         }
-
     }
 
     void FixedUpdate()
@@ -88,14 +93,16 @@ public class PlayerAttack : MonoBehaviour
         if (isPerformingSpecialAttack && jumpScript.IsGrounded)
         {
             Debug.Log("Impacto del ataque especial contra el suelo");
-            PerformSpecialAttack();
+            StartCoroutine(PerformSpecialAttack());
             isPerformingSpecialAttack = false;
         }
     }
 
-    void Attack()
+    IEnumerator Attack()
     {
         Debug.Log("Jugador atacando");
+        animator.SetBool("WeakAttack", true);
+
         float attackRange = stats.ActiveStats.attackRange;
         int attackDamage = stats.ActiveStats.attackDamage;
 
@@ -106,19 +113,22 @@ public class PlayerAttack : MonoBehaviour
             if (combat != null)
                 combat.TakeDamage(attackDamage, gameObject);
         }
+
+        yield return new WaitForSeconds(weakAttackAnimTime);
+        animator.SetBool("WeakAttack", false);
     }
 
-    void HardAttack()
+    IEnumerator HardAttack()
     {
+        animator.SetBool("HeavyAttack", true);
+
         float range = stats.ActiveStats.HardAttackRange;
         int damage = stats.ActiveStats.HardAttackDamage;
 
         Collider[] hits = Physics.OverlapSphere(attackOrigin.position, range, enemyLayer);
-
         foreach (Collider enemy in hits)
         {
             bool enemyIsRight = enemy.transform.position.x > transform.position.x;
-
             if (isFacingRight == enemyIsRight)
             {
                 EnemyCombatHandler combat = enemy.GetComponentInChildren<EnemyCombatHandler>();
@@ -126,21 +136,22 @@ public class PlayerAttack : MonoBehaviour
                 {
                     combat.TakeDamage(damage, gameObject);
 
-                    // Aplicar retroceso
                     Rigidbody enemyRb = enemy.GetComponentInParent<Rigidbody>();
                     if (enemyRb != null)
                     {
                         Vector3 knockbackDir = (enemy.transform.position - transform.position).normalized;
-                        Vector3 force = new Vector3(knockbackDir.x, 0.1f, 0f) * 250f; // Ajusta la magnitud
+                        Vector3 force = new Vector3(knockbackDir.x, 0.1f, 0f) * 250f;
                         enemyRb.AddForce(force, ForceMode.Impulse);
                     }
                 }
             }
         }
+
+        yield return new WaitForSeconds(heavyAttackAnimTime);
+        animator.SetBool("HeavyAttack", false);
     }
 
-
-    void PerformSpecialAttack()
+    IEnumerator PerformSpecialAttack()
     {
         float range = stats.ActiveStats.SpecialAttackRange;
         int damage = stats.ActiveStats.SpecialAttackDamage;
@@ -149,7 +160,6 @@ public class PlayerAttack : MonoBehaviour
         Debug.Log($"Especial golpea a {enemies.Length} enemigos.");
 
         bool hitEnemy = false;
-
         foreach (Collider enemy in enemies)
         {
             EnemyCombatHandler combat = enemy.GetComponentInChildren<EnemyCombatHandler>();
@@ -160,13 +170,14 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
-        // Rebote si golpeó al menos un enemigo
         if (hitEnemy)
         {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 10f, rb.linearVelocity.z); // valor ajustable
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, 10f, rb.linearVelocity.z);
         }
-    }
 
+        yield return new WaitForSeconds(0.5f); // Duración estimada del "impacto" especial
+        animator.SetBool("Fury", false);
+    }
 
     public bool IsPerformingSpecialAttack => isPerformingSpecialAttack;
 

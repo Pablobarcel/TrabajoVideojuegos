@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerJump : MonoBehaviour
 {
     [Header("Ground Check")]
-    public float groundCheckRadius = 0.2f; // Cambiado de distancia a radio
+    public float groundCheckRadius = 0.2f;
     public LayerMask groundLayer;
     public Transform groundCheck;
 
@@ -14,11 +14,14 @@ public class PlayerJump : MonoBehaviour
     private PlayerWallJump wallJumpScript;
     private PlayerStats stats;
 
+    private Animator animator;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         wallJumpScript = GetComponent<PlayerWallJump>();
         stats = GetComponent<PlayerStats>();
+        animator = GetComponent<Animator>();
 
         if (stats == null)
         {
@@ -28,8 +31,13 @@ public class PlayerJump : MonoBehaviour
 
     void Update()
     {
-        // Cambiamos Raycast por CheckSphere para detección más fiable
         IsGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
+
+        animator.SetBool("IsGrounded", IsGrounded);
+
+        // Actualizar JumpVelocity para animación
+        float verticalVelocity = rb.linearVelocity.y;
+        animator.SetFloat("JumpVelocity", verticalVelocity);
 
         if (IsGrounded)
         {
@@ -57,6 +65,7 @@ public class PlayerJump : MonoBehaviour
         Vector3 jumpVelocity = rb.linearVelocity;
         jumpVelocity.y = jumpForce;
         rb.linearVelocity = jumpVelocity;
+
         jumpsRemaining--;
 
         Debug.Log($"Saltando con fuerza: {jumpForce}");
