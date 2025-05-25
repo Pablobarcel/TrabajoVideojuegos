@@ -36,7 +36,7 @@ public class PlayerFormController : MonoBehaviour
 
             if (!hasTransformed && holdTime >= holdThreshold)
             {
-                CycleForm();
+                ToggleForm();  // <- Cambio aquí
                 hasTransformed = true;
             }
         }
@@ -49,21 +49,30 @@ public class PlayerFormController : MonoBehaviour
         }
     }
 
-    void CycleForm()
+    void ToggleForm()
     {
-        // Cambiar forma en PlayerStats
         int oldMaxHealth = playerStats.ActiveStats.vidas;
         PlayerStats.PlayerForm previousForm = playerStats.currentForm;
-        playerStats.currentForm = (PlayerStats.PlayerForm)(((int)playerStats.currentForm + 1) % 3);
+
+        // Cambiar entre Light y Shadow
+        if (playerStats.currentForm == PlayerStats.PlayerForm.Light)
+        {
+            playerStats.currentForm = PlayerStats.PlayerForm.Shadow;
+        }
+        else
+        {
+            playerStats.currentForm = PlayerStats.PlayerForm.Light;
+        }
+
         Debug.Log($"Cambiando de: {previousForm} a {playerStats.currentForm}");
+
         ApplyFormVisuals();
-        // En PlayerFormController, dentro de CycleForm() justo después de ApplyFormVisuals():
+
         var playerHealth = GetComponent<PlayerHealth>();
         if (playerHealth != null)
         {
             playerHealth.UpdateHealthOnFormChange(oldMaxHealth);
         }
-
     }
 
     void ApplyFormVisuals()
@@ -71,9 +80,8 @@ public class PlayerFormController : MonoBehaviour
         if (playerStats == null) return;
 
         var activeStats = playerStats.ActiveStats;
-        playerTransform.localScale = Vector3.one * activeStats.scale;
-        spriteRenderer.color = activeStats.color;
 
         Debug.Log($"Forma actual: {playerStats.currentForm}");
+        // Aquí puedes aplicar visuales como color, sprite, efectos, etc.
     }
 }

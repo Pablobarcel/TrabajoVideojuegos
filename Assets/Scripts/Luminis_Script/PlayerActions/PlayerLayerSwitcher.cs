@@ -6,9 +6,11 @@ public class PlayerLayerSwitcher : MonoBehaviour
     public float[] layerZPositions = { 0f, -20f, -40f };
     private int currentLayerIndex = 0;
 
+    private LayerPortalZone currentPortal;
+
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && currentPortal != null && currentPortal.PlayerInside)
         {
             bool wantsDown = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
             bool wantsUp = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
@@ -33,5 +35,21 @@ public class PlayerLayerSwitcher : MonoBehaviour
         transform.position = pos;
 
         Debug.Log($"Jugador movido a capa {index} (Z = {layerZPositions[index]})");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent<LayerPortalZone>(out LayerPortalZone portal))
+        {
+            currentPortal = portal;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent<LayerPortalZone>(out LayerPortalZone portal) && portal == currentPortal)
+        {
+            currentPortal = null;
+        }
     }
 }
