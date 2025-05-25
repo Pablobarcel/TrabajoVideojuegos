@@ -100,6 +100,7 @@ public class PlayerAttack : MonoBehaviour
 
     IEnumerator Attack()
     {
+        Debug.Log("Jugador atacando");
         animator.SetBool("WeakAttack", true);
 
         float attackRange = stats.ActiveStats.attackRange;
