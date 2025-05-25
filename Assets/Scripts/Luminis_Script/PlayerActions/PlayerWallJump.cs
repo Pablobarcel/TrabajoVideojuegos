@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class PlayerWallJump : MonoBehaviour
@@ -15,11 +16,16 @@ public class PlayerWallJump : MonoBehaviour
     private PlayerStats playerStats;
     private Vector3 lastWallNormal;
 
+    private Animator animator;
+
+    private bool isWallJumping = false;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         jumpScript = GetComponent<PlayerJump>();
         playerStats = GetComponent<PlayerStats>();
+        animator = GetComponent<Animator>();
 
         if (playerStats == null)
             Debug.LogError("PlayerStats component not found.");
@@ -31,10 +37,24 @@ public class PlayerWallJump : MonoBehaviour
 
         float wallSlideSpeed = playerStats != null ? playerStats.ActiveStats.wallSlideSpeed : 1f;
 
+        // Deslizamiento por pared
         if (IsWallSliding && rb.linearVelocity.y < -wallSlideSpeed)
         {
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, -wallSlideSpeed, rb.linearVelocity.z);
         }
+
+        // Actualizar animación de salto por pared
+        if (isWallJumping)
+        {
+            if (rb.linearVelocity.y <= 2f || jumpScript.IsGrounded)
+            {
+                isWallJumping = false;
+                animator.SetBool("WallJump", false);
+            }
+        }
+
+        // Actualizar animación de deslizamiento por pared
+        animator.SetBool("Wall", IsWallSliding && !jumpScript.IsGrounded);
     }
 
     void CheckForWall()
@@ -42,14 +62,12 @@ public class PlayerWallJump : MonoBehaviour
         IsWallSliding = false;
         lastWallNormal = Vector3.zero;
 
-        // Detecta todas las colisiones cercanas
         Collider[] hits = Physics.OverlapSphere(transform.position, wallCheckRadius, wallLayer);
 
         foreach (var hit in hits)
         {
             if (!jumpScript.IsGrounded && rb.linearVelocity.y < 0)
             {
-                // Calculamos la normal más cercana
                 Vector3 directionToWall = transform.position - hit.ClosestPoint(transform.position);
                 lastWallNormal = directionToWall.normalized;
 
@@ -64,12 +82,16 @@ public class PlayerWallJump : MonoBehaviour
         if (!IsWallSliding || playerStats == null || lastWallNormal == Vector3.zero)
             return;
 
-        // Invertimos la dirección horizontal del salto con base en la pared
         Vector3 jumpDir = Vector3.Reflect(wallJumpDirection, lastWallNormal).normalized;
         float wallJumpForce = playerStats.ActiveStats.wallJumpForce;
 
         rb.linearVelocity = jumpDir * wallJumpForce;
         IsWallSliding = false;
+
+        // Activar animación de salto por pared
+        isWallJumping = true;
+        animator.SetBool("WallJump", true);
+        animator.SetBool("Wall", false); // Asegura que se desactive al saltar
     }
 
     void OnDrawGizmosSelected()

@@ -7,6 +7,7 @@ public class PlayerHealth : MonoBehaviour
     private UIManager ui;
     private PlayerStats playerStats;
     private Rigidbody rb;
+    Animator animator;
 
     private bool isInvisible = false;
     private float invisibilityDuration = 3f;
@@ -16,6 +17,7 @@ public class PlayerHealth : MonoBehaviour
     {
         playerStats = GetComponent<PlayerStats>();
         rb = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
 
         if (playerStats == null)
         {
@@ -51,6 +53,7 @@ public class PlayerHealth : MonoBehaviour
 
         ApplyKnockback(damageSourcePosition);
         StartCoroutine(BecomeInvisible());
+        StartCoroutine(Ouch());
         
         if (currentHealth <= 0)
         {
@@ -76,6 +79,7 @@ public class PlayerHealth : MonoBehaviour
 
     private IEnumerator BecomeInvisible()
     {
+        
         isInvisible = true;
         yield return new WaitForSeconds(0.1f);
 
@@ -99,6 +103,13 @@ public class PlayerHealth : MonoBehaviour
         isInvisible = false;
     }
 
+    public IEnumerator Ouch()
+    {
+        animator.SetBool("Damage",true);
+        yield return new WaitForSeconds(0.3f);
+        animator.SetBool("Damage",false);
+    }
+
 
 
 
@@ -109,6 +120,7 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
+       
         Debug.Log("Jugador ha muerto.");
         // Reiniciar nivel, mostrar animación, etc.
     }
