@@ -1,9 +1,12 @@
 using UnityEngine;
+using System.Collections;
 
 public class EnemyCombatHandler : MonoBehaviour
 {
-    private EnemyStats stats;
-    private bool isDead = false;
+    protected EnemyStats stats;
+    protected bool isDead = false;
+
+    protected bool wasHitFromFront = true; // Se actualiza justo antes de TakeDamage
 
     private void Start()
     {
@@ -14,35 +17,19 @@ public class EnemyCombatHandler : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    // NUEVO: se llama desde PlayerAttack para indicar la dirección del golpe
+    public virtual void SetLastHitDirection(bool fromFront)
     {
-        if (!other.CompareTag("Player")) return;
-
-        PlayerHealth health = other.GetComponent<PlayerHealth>();
-        PlayerAttack attack = other.GetComponent<PlayerAttack>();
-
-        if (attack != null && attack.IsPerformingSpecialAttack)
-        {
-            Debug.Log("¡El jugador ha caído sobre el enemigo con ataque especial!");
-            return; // No dañamos al jugador
-        }
-
-        if (health != null && !health.IsInvisible())
-        {
-            Debug.Log("¡Jugador en rango de ataque!");
-            health.TakeDamage(stats.damage, transform.position);
-        }
+        wasHitFromFront = fromFront;
     }
 
-
-    public void TakeDamage(int damage, GameObject player)
+    public virtual void TakeDamage(int damage, GameObject player)
     {
         if (isDead) return;
 
         stats.lifes -= damage;
         Debug.Log($"El enemigo ha recibido {damage} de daño. Vida restante: {stats.lifes}");
 
-        // Añadir furia al jugador por impacto
         PlayerStats playerStats = player.GetComponent<PlayerStats>();
         if (playerStats != null)
         {
@@ -57,7 +44,7 @@ public class EnemyCombatHandler : MonoBehaviour
             if (playerStats != null)
             {
                 playerStats.monedas += stats.coinReward;
-                playerStats.AddFuria(stats.furyRewardOnDeath); // Dar furia por matar al enemigo
+                playerStats.AddFuria(stats.furyRewardOnDeath);
 
                 UIManager ui = FindFirstObjectByType<UIManager>();
                 ui?.UpdateMonedas(playerStats.monedas);
@@ -66,5 +53,4 @@ public class EnemyCombatHandler : MonoBehaviour
             Destroy(transform.parent.gameObject);
         }
     }
-
 }

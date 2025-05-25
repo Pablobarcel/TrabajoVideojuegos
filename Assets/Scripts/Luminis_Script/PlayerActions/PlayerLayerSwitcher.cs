@@ -4,11 +4,17 @@ public class PlayerLayerSwitcher : MonoBehaviour
 {
     [Header("Capas del mundo (en orden de Z)")]
     public float[] layerZPositions = { 0f, -20f, -40f };
+    public bool canSwitchLayers = false;
+
     private int currentLayerIndex = 0;
+
+    private LayerPortalZone currentPortal;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (!canSwitchLayers) return; // ← No dejar cambiar de capa si no ha recogido el objeto
+
+        if (Input.GetKeyDown(KeyCode.E) && currentPortal != null && currentPortal.PlayerInside)
         {
             bool wantsDown = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
             bool wantsUp = Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow);
@@ -26,6 +32,7 @@ public class PlayerLayerSwitcher : MonoBehaviour
         }
     }
 
+
     void MoveToLayer(int index)
     {
         Vector3 pos = transform.position;
@@ -33,5 +40,21 @@ public class PlayerLayerSwitcher : MonoBehaviour
         transform.position = pos;
 
         Debug.Log($"Jugador movido a capa {index} (Z = {layerZPositions[index]})");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent<LayerPortalZone>(out LayerPortalZone portal))
+        {
+            currentPortal = portal;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent<LayerPortalZone>(out LayerPortalZone portal) && portal == currentPortal)
+        {
+            currentPortal = null;
+        }
     }
 }

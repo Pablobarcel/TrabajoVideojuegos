@@ -86,6 +86,7 @@ public class PlayerAttack : MonoBehaviour
                 Debug.Log("No tienes suficiente furia para usar el ataque especial.");
             }
         }
+        
     }
 
     void FixedUpdate()
@@ -110,8 +111,13 @@ public class PlayerAttack : MonoBehaviour
         {
             EnemyCombatHandler combat = enemy.GetComponentInChildren<EnemyCombatHandler>();
             if (combat != null)
+            {
+                bool isEnemyInFront = (enemy.transform.position.x > transform.position.x) == isFacingRight;
+                combat.SetLastHitDirection(isEnemyInFront); // NUEVA FUNCIÓN QUE AGREGAREMOS
                 combat.TakeDamage(attackDamage, gameObject);
+            }
         }
+
 
         yield return new WaitForSeconds(weakAttackAnimTime);
         animator.SetBool("WeakAttack", false);

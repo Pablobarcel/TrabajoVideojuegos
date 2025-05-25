@@ -2,8 +2,11 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    public enum PlayerForm { Shadow, Light }
+    public enum PlayerForm { Light , Shadow }
     public PlayerForm currentForm = PlayerForm.Light;
+
+    [Header("Form Change")]
+    public bool canChangeForm = false; // Por defecto no puede cambiar
 
     [Header("Referencias")]
     public GameObject player;
@@ -51,6 +54,7 @@ public class PlayerStats : MonoBehaviour
 
         [Header("Furia")]
         public int maxFuria = 100;
+
     }
 
     [Header("Stats por forma")]
