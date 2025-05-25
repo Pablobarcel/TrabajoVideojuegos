@@ -101,6 +101,8 @@ public class PlayerFormController : MonoBehaviour
     var activeStats = playerStats.ActiveStats;
     playerTransform.localScale = Vector3.one * activeStats.scale;
     spriteRenderer.color = activeStats.color;
+    
+    
 
     
     Vector3 currentScale = playerTransform.localScale;
