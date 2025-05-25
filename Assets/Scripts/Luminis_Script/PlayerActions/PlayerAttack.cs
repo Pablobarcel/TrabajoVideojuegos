@@ -95,6 +95,7 @@ public class PlayerAttack : MonoBehaviour
 
     void Attack()
     {
+        Debug.Log("Jugador atacando");
         float attackRange = stats.ActiveStats.attackRange;
         int attackDamage = stats.ActiveStats.attackDamage;
 

@@ -10,7 +10,7 @@ public class PlayerInteraction : MonoBehaviour
 
     void Start()
     {
-        interactionPrompt = FindObjectOfType<InteractionPrompt>();
+        interactionPrompt = FindAnyObjectByType<InteractionPrompt>();
     }
 
     void Update()
