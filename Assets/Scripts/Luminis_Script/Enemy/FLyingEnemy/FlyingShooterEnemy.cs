@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 public class FlyingShooterEnemy : MonoBehaviour
@@ -17,12 +18,15 @@ public class FlyingShooterEnemy : MonoBehaviour
     private float directionChangeInterval = 3f;
     private float directionChangeTimer;
 
+    private Animator animator;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         stats = GetComponent<EnemyStats>();
         shootTimer = shootCooldown;
         directionChangeTimer = directionChangeInterval;
+        animator = GetComponent<Animator>();
 
         SetRandomDirection();
     }
@@ -70,6 +74,7 @@ public class FlyingShooterEnemy : MonoBehaviour
             float y = Random.Range(-0.5f, 0.5f);
             newDirection = new Vector3(x, y, 0f).normalized;
         } while (newDirection == Vector3.zero); // Evita vector nulo
+        } while (newDirection == Vector3.zero);// Evita vector nulo
 
         moveDirection = newDirection;
         transform.rotation = Quaternion.LookRotation(moveDirection);
@@ -92,6 +97,9 @@ public class FlyingShooterEnemy : MonoBehaviour
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
         Vector3 direction = (player.transform.position - firePoint.position).normalized;
         bullet.GetComponent<Rigidbody>().linearVelocity = direction * 10f;
+
+        // Activar animación de ataque
+        StartCoroutine(TriggerAnimation("Attack", 1f));
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -103,10 +111,24 @@ public class FlyingShooterEnemy : MonoBehaviour
             {
                 health.TakeDamage(stats.damage, transform.position);
             }
+
+            // Activar animación de daño
+            StartCoroutine(TriggerAnimation("IsHurt", 0.5f));
         }
         else
         {
             SetRandomDirection(); // Cambia dirección en cualquier otra colisión
+            SetRandomDirection();// Cambia dirección en cualquier otra colisión
+        }
+    }
+
+    IEnumerator TriggerAnimation(string param, float duration)
+    {
+        if (animator != null)
+        {
+            animator.SetBool(param, true);
+            yield return new WaitForSeconds(duration);
+            animator.SetBool(param, false);
         }
     }
 }

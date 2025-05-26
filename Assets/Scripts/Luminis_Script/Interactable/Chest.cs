@@ -10,18 +10,21 @@ public class Chest : MonoBehaviour, IInteractable
     public GameObject healingItemPrefab;
     public Transform spawnPoint;
     public float spread = 0.5f;
+    Animator animator;
 
     private Renderer rend;
 
     private void Start()
     {
         rend = GetComponent<Renderer>();
+        animator = GetComponent<Animator>();
     }
 
     public void Interact()
     {
         if (isOpened || reward == null) return;
         isOpened = true;
+        animator.SetBool("Open",true);
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
