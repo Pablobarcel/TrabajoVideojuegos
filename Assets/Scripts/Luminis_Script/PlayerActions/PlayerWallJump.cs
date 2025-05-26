@@ -33,7 +33,13 @@ public class PlayerWallJump : MonoBehaviour
 
     void Update()
     {
+        if (playerStats == null) return;
+
+        // Si el wall jump no está desbloqueado, no hacemos nada
+        if (!playerStats.wallJumpUnlocked) return;
+        
         CheckForWall();
+
 
         float wallSlideSpeed = playerStats != null ? playerStats.ActiveStats.wallSlideSpeed : 1f;
 

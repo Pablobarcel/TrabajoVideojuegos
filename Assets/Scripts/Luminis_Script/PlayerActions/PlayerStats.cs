@@ -7,6 +7,10 @@ public class PlayerStats : MonoBehaviour
 
     [Header("Habilidades desbloqueadas")]
     public bool dashUnlocked = false;
+    public bool HardAttackUnlocked = false;
+    public bool SpecialAttackUnlocked = false;
+    public bool KeyUnlocked = false;
+    public bool wallJumpUnlocked = false;
     public bool canChangeForm = false; // Por defecto no puede cambiar
 
     [Header("Referencias")]

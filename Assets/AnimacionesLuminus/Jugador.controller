@@ -67,7 +67,6 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
   - m_ConditionMode: 2
     m_ConditionEvent: IsGrounded
     m_EventTreshold: 0
@@ -1482,7 +1481,6 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: 8535629270988484450}
     m_Position: {x: 1890, y: 150, z: 0}
-    m_Position: {x: 1870, y: 190, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: 3394556624263303503}
@@ -1783,7 +1781,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: IsGrounded
     m_EventTreshold: 0
-  - m_ConditionMode: 2
   - m_ConditionMode: 1
     m_ConditionEvent: Wall
     m_EventTreshold: 0
@@ -3056,7 +3053,6 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: LightMode
     m_EventTreshold: 0
-  - m_ConditionMode: 1
   - m_ConditionMode: 2
     m_ConditionEvent: IsGrounded
     m_EventTreshold: 0

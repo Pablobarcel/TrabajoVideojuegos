@@ -36,19 +36,19 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
-        // Dirección del jugador
         if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
             isFacingRight = false;
         else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
             isFacingRight = true;
 
-        // Ataque normal
         if (Input.GetKeyDown(attackKey))
             StartCoroutine(Attack());
 
-        // Heavy Attack
+        // === ATAQUE FUERTE ===
         if (Input.GetKeyDown(hardAttackKey))
         {
+            if (!stats.HardAttackUnlocked) return; // 🔒 Bloquea si no está desbloqueado
+
             isHoldingHardAttack = true;
             hardAttackTimer = 0f;
             animator.SetBool("Charging", true);
@@ -68,9 +68,11 @@ public class PlayerAttack : MonoBehaviour
             }
         }
 
-        // Ataque especial
+        // === ATAQUE ESPECIAL ===
         if (Input.GetKeyDown(specialAttackKey) && !jumpScript.IsGrounded)
         {
+            if (!stats.SpecialAttackUnlocked) return; // 🔒 Bloquea si no está desbloqueado
+
             int furyCost = stats.ActiveStats.SpecialAttackFuryCost;
 
             if (stats.GetFuriaActual() >= furyCost)
@@ -86,7 +88,6 @@ public class PlayerAttack : MonoBehaviour
                 Debug.Log("No tienes suficiente furia para usar el ataque especial.");
             }
         }
-        
     }
 
     void FixedUpdate()
@@ -113,11 +114,10 @@ public class PlayerAttack : MonoBehaviour
             if (combat != null)
             {
                 bool isEnemyInFront = (enemy.transform.position.x > transform.position.x) == isFacingRight;
-                combat.SetLastHitDirection(isEnemyInFront); // NUEVA FUNCIÓN QUE AGREGAREMOS
+                combat.SetLastHitDirection(isEnemyInFront);
                 combat.TakeDamage(attackDamage, gameObject);
             }
         }
-
 
         yield return new WaitForSeconds(weakAttackAnimTime);
         animator.SetBool("WeakAttack", false);
@@ -180,7 +180,7 @@ public class PlayerAttack : MonoBehaviour
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 10f, rb.linearVelocity.z);
         }
 
-        yield return new WaitForSeconds(0.5f); // Duración estimada del "impacto" especial
+        yield return new WaitForSeconds(0.5f);
         animator.SetBool("Fury", false);
     }
 
