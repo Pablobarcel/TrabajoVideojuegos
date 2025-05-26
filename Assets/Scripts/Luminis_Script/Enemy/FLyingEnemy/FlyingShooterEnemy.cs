@@ -75,6 +75,7 @@ public class FlyingShooterEnemy : MonoBehaviour
             newDirection = new Vector3(x, y, 0f).normalized;
         } while (newDirection == Vector3.zero); // Evita vector nulo
         } while (newDirection == Vector3.zero);// Evita vector nulo
+        
 
         moveDirection = newDirection;
         transform.rotation = Quaternion.LookRotation(moveDirection);
@@ -131,4 +132,5 @@ public class FlyingShooterEnemy : MonoBehaviour
             animator.SetBool(param, false);
         }
     }
+
 }
