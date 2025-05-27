@@ -50,9 +50,9 @@ public class PlayerHealth : MonoBehaviour
         if (currentHealth < 0) currentHealth = 0;
 
         ui?.UpdateVida(currentHealth);
-
-        ApplyKnockback(damageSourcePosition);
+        
         StartCoroutine(BecomeInvisible());
+        ApplyKnockback(damageSourcePosition);
         StartCoroutine(Ouch());
         
         if (currentHealth <= 0)

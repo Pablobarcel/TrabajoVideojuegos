@@ -9,11 +9,11 @@ public class HealingItem : MonoBehaviour
         healingAmount = amount;
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            PlayerHealth health = other.GetComponent<PlayerHealth>();
+            PlayerHealth health = collision.gameObject.GetComponent<PlayerHealth>();
             if (health != null)
             {
                 health.Heal(healingAmount);

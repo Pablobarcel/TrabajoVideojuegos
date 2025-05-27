@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f3d5664593bb1c40845e67310398138, type: 3}
   m_Name: Cofre1
   m_EditorClassIdentifier: 
-  coinAmount: 0
+  coinAmount: 20
   healingItemsToSpawn: 1
   healingAmountPerItem: 1
