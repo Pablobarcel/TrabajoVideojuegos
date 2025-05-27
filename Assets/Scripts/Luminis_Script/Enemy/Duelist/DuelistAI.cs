@@ -16,12 +16,15 @@ public class DuelistAI : MonoBehaviour
     private bool isChasing = false;
     private bool isStunned = false;
 
+    Animator animator;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         stats = GetComponent<EnemyStats>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         initialScale = transform.localScale;
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -38,6 +41,7 @@ public class DuelistAI : MonoBehaviour
 
         if (isChasing)
         {
+            animator.SetBool("IsMoving",true);
             Vector3 direction = (player.position - transform.position).normalized;
             rb.linearVelocity = new Vector3(direction.x * chaseSpeed, rb.linearVelocity.y, 0f);
 
@@ -56,6 +60,7 @@ public class DuelistAI : MonoBehaviour
 
     void Patrol()
     {
+        animator.SetBool("IsMoving",true);
         rb.linearVelocity = new Vector3(patrolDirection.x * patrolSpeed, rb.linearVelocity.y, 0f);
 
         RaycastHit hit;
@@ -76,6 +81,9 @@ public class DuelistAI : MonoBehaviour
     public IEnumerator StunAndKnockback(Vector3 sourcePosition)
     {
         isStunned = true;
+        
+        animator.SetBool("Hurt",true);
+        animator.SetBool("IsMoving",false);
 
         // Cancelar movimiento actual
         rb.linearVelocity = Vector3.zero;
@@ -89,6 +97,9 @@ public class DuelistAI : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
+        animator.SetBool("Hurt",false);
+        animator.SetBool("IsMoving",true);
+        
         isStunned = false;
     }
 

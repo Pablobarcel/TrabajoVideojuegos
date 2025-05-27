@@ -12,6 +12,13 @@ public class DuelistCombatHandler : EnemyCombatHandler
     public Transform dropSpawnPoint;
     public float dropSpread = 0.5f;
 
+    private Animator animator;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
+
     public override void TakeDamage(int damage, GameObject player)
     {
         if (isDead) return;
@@ -26,14 +33,25 @@ public class DuelistCombatHandler : EnemyCombatHandler
 
         if (wasHitFromFront && Random.value < 0.4f)
         {
+            if (animator != null)
+            {
+               StartCoroutine(TriggerAnimatorBool("Protect", 0.6f));
+            }
+            
             Debug.Log("¡Parry del duelista! No recibe daño.");
             return;
         }
 
         if (repeatedHits >= 3)
         {
+            
             Debug.Log("¡El duelista contraataca!");
             repeatedHits = 0;
+            if (animator != null)
+            {
+              StartCoroutine(TriggerAnimatorBool("Attack", 1f));
+            }
+            
 
             PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
             if (playerHealth != null && !playerHealth.IsInvisible())
@@ -41,7 +59,8 @@ public class DuelistCombatHandler : EnemyCombatHandler
                 playerHealth.TakeDamage(stats.damage, transform.position);
             }
         }
-
+       
+        StartCoroutine(TriggerAnimatorBool("Hurt", 1f));
         stats.lifes -= damage;
         Debug.Log($"El duelista ha recibido {damage} de daño. Vida restante: {stats.lifes}");
 
@@ -101,5 +120,12 @@ public class DuelistCombatHandler : EnemyCombatHandler
 
             Destroy(transform.parent.gameObject);
         }
+    }
+
+    private IEnumerator TriggerAnimatorBool(string parameter, float duration)
+    {
+        animator.SetBool(parameter, true);
+        yield return new WaitForSeconds(duration);
+        animator.SetBool(parameter, false);
     }
 }
