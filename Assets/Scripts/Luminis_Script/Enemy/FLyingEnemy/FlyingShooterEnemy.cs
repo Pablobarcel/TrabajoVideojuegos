@@ -74,7 +74,6 @@ public class FlyingShooterEnemy : MonoBehaviour
             float y = Random.Range(-0.5f, 0.5f);
             newDirection = new Vector3(x, y, 0f).normalized;
         } while (newDirection == Vector3.zero); // Evita vector nulo
-        } while (newDirection == Vector3.zero);// Evita vector nulo
         
 
         moveDirection = newDirection;
