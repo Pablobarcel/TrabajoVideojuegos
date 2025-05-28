@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class WallmasterCombatHandler : EnemyCombatHandler
 {
@@ -9,19 +10,22 @@ public class WallmasterCombatHandler : EnemyCombatHandler
     public float dropSpread = 0.5f;
 
     private Transform player;
+    Animator animator;
 
     private void Startt()
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         stats = GetComponentInParent<EnemyStats>();
+        animator = GetComponent<Animator>();
     }
 
     public override void TakeDamage(int damage, GameObject player)
     {
         if (isDead) return;
-
+        
         stats.lifes -= damage;
         Debug.Log($"Wallmaster recibe {damage} de daño. Vida restante: {stats.lifes}");
+        StartCoroutine(Ouch());
 
         PlayerStats playerStats = player.GetComponent<PlayerStats>();
         if (playerStats != null)
@@ -84,5 +88,16 @@ public class WallmasterCombatHandler : EnemyCombatHandler
             Destroy(wallPrefab);
             Destroy(transform.gameObject);
         }
+    }
+
+    
+    IEnumerator Ouch()
+    {
+        animator.SetBool("Ouch", true);
+        yield return new WaitForSeconds(2f); 
+        animator.SetBool("Ouch", false);
+        
+            
+        
     }
 }

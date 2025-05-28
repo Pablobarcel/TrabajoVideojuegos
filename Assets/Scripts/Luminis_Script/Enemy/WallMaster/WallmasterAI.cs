@@ -14,11 +14,14 @@ public class WallmasterAI : MonoBehaviour
     private bool isCharging = false;
     private bool isInWallState = false;
 
+    Animator animator; 
+
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = GetComponent<Rigidbody>();
         stats = GetComponent<EnemyStats>();
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -38,12 +41,13 @@ public class WallmasterAI : MonoBehaviour
 
         if (action == 0 && wallPositions.Length > 0)
         {
-            yield return JumpToWallAndAttack();
+            StartCoroutine(JumpToWallAndAttack());
         }
         else
         {
-            GroundCharge();
+            StartCoroutine(GroundCharge());
             yield return new WaitForSeconds(2.5f); // Duración del charge
+            animator.SetBool("Attack",false);
         }
 
         // Espera antes de permitir siguiente acción
@@ -54,7 +58,7 @@ public class WallmasterAI : MonoBehaviour
     IEnumerator JumpToWallAndAttack()
     {
         isInWallState = true;
-
+        animator.SetBool("Jump",true);
         Transform chosenWall = wallPositions[Random.Range(0, wallPositions.Length)];
         Vector3 dir = (chosenWall.position - transform.position).normalized;
         dir.y = 1f;
@@ -65,28 +69,39 @@ public class WallmasterAI : MonoBehaviour
 
         // Espera a que “llegue” a la pared (puedes ajustar este valor)
         yield return new WaitForSeconds(2f);
+        
 
         // Se detiene y espera sobre la pared
+        animator.SetBool("Jump",false);
+        animator.SetBool("Wait",true);
         rb.linearVelocity = Vector3.zero;
         yield return new WaitForSeconds(0.4f); // Pausa en la pared antes de lanzarse
 
         // Ataque desde la pared
+        animator.SetBool("Wait",false);
+        animator.SetBool("Attack",true);
         Vector3 attackDir = (player.position - transform.position).normalized;
         attackDir.y = 0.2f;
         rb.AddForce(attackDir.normalized * jumpForce, ForceMode.Impulse);
 
         Debug.Log("Wallmaster se lanza desde la pared al jugador.");
         isInWallState = false;
+        yield return new WaitForSeconds(1f);
+        animator.SetBool("Attack",false);
+
     }
 
-    void GroundCharge()
+    IEnumerator GroundCharge()
     {
         Vector3 dir = (player.position - transform.position).normalized;
         dir.y = 0f;
 
         rb.linearVelocity = Vector3.zero;
         rb.AddForce(dir * chargeForce, ForceMode.Impulse);
+        animator.SetBool("Attack",true);
         Debug.Log("Wallmaster realiza una embestida en el suelo.");
+        yield return new WaitForSeconds(1f);
+        
     }
 
     private void OnCollisionEnter(Collision collision)
