@@ -1484,6 +1484,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TiendaCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 1507808405212320382, guid: 4b78e9b60397a8545a44cb04b6c30990, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3315365660747082345, guid: 4b78e9b60397a8545a44cb04b6c30990, type: 3}
       propertyPath: m_Pivot.x
       value: 0

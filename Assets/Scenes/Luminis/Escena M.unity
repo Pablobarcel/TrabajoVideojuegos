@@ -498,7 +498,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1186482332
 Transform:
   m_ObjectHideFlags: 0
@@ -687,6 +687,10 @@ PrefabInstance:
     - target: {fileID: 8648302635809701747, guid: d4b19104465931d4d9c7944fcfe205a1, type: 3}
       propertyPath: m_Name
       value: StaticThrower Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 8648302635809701747, guid: d4b19104465931d4d9c7944fcfe205a1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -898,7 +902,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1539829661
 Transform:
   m_ObjectHideFlags: 0
@@ -1052,7 +1056,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1557995211
 Transform:
   m_ObjectHideFlags: 0
@@ -1098,8 +1102,10 @@ MonoBehaviour:
   patrolSpeed: 0
   chaseSpeed: 0
   lifes: 2
+  currentHealth: 0
   furyRewardOnDeath: 25
   furyPerHit: 5
+  enemyID: 
 --- !u!114 &1557995214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1944,6 +1950,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cofre
       objectReference: {fileID: 0}
+    - target: {fileID: 8934397882468201121, guid: 313e5562b62632443a1f94919d9746f6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2001,6 +2011,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PiedraSaltoPared
       objectReference: {fileID: 0}
+    - target: {fileID: 4647026903399565511, guid: 9c8ef5cd7c7d92f4e8feaaa8b03171db, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2057,6 +2071,10 @@ PrefabInstance:
     - target: {fileID: 6344142598099625610, guid: e70b22e46e649b04badbf1ee846d161c, type: 3}
       propertyPath: m_Name
       value: PiedraAtaqueFuerte
+      objectReference: {fileID: 0}
+    - target: {fileID: 6344142598099625610, guid: e70b22e46e649b04badbf1ee846d161c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2434,6 +2452,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PiedraSombra
       objectReference: {fileID: 0}
+    - target: {fileID: 1252831953772441675, guid: b81cb1d86e0932e4b90d8bf0579c37aa, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2490,6 +2512,10 @@ PrefabInstance:
     - target: {fileID: 6593129400078972614, guid: 6353bc941dc069a42888ca7c46d0fe0b, type: 3}
       propertyPath: m_Name
       value: PiedraDash
+      objectReference: {fileID: 0}
+    - target: {fileID: 6593129400078972614, guid: 6353bc941dc069a42888ca7c46d0fe0b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2654,6 +2680,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bala
       objectReference: {fileID: 0}
+    - target: {fileID: 6037401083732419724, guid: 3d85f2294aea3c54c8ab1657ffd0c0de, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2675,6 +2705,10 @@ PrefabInstance:
     - target: {fileID: 5414842687430000110, guid: 9342e85bc4383b04f8d54d279a84ee6e, type: 3}
       propertyPath: m_Name
       value: PiedraAtaqueEspecial
+      objectReference: {fileID: 0}
+    - target: {fileID: 5414842687430000110, guid: 9342e85bc4383b04f8d54d279a84ee6e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7619544053772335584, guid: 9342e85bc4383b04f8d54d279a84ee6e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2773,6 +2807,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Banco
       objectReference: {fileID: 0}
+    - target: {fileID: 8076012397426580714, guid: 8f1d2e7b6c0c8df44899bfcea30b3398, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2830,11 +2868,72 @@ PrefabInstance:
       propertyPath: m_Name
       value: PiedraCambioCapa
       objectReference: {fileID: 0}
+    - target: {fileID: 9093047193581684426, guid: 2f32180b78f2d0841b665acec6709b9f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f32180b78f2d0841b665acec6709b9f, type: 3}
+--- !u!1001 &6064503007991084144
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5546195189343460856, guid: de6d7bd08fe81b64ba77aa776de9455f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -86.0057
+      objectReference: {fileID: 0}
+    - target: {fileID: 5546195189343460856, guid: de6d7bd08fe81b64ba77aa776de9455f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 107.99
+      objectReference: {fileID: 0}
+    - target: {fileID: 5546195189343460856, guid: de6d7bd08fe81b64ba77aa776de9455f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.5999997
+      objectReference: {fileID: 0}
+    - target: {fileID: 5546195189343460856, guid: de6d7bd08fe81b64ba77aa776de9455f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5546195189343460856, guid: de6d7bd08fe81b64ba77aa776de9455f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5546195189343460856, guid: de6d7bd08fe81b64ba77aa776de9455f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5546195189343460856, guid: de6d7bd08fe81b64ba77aa776de9455f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5546195189343460856, guid: de6d7bd08fe81b64ba77aa776de9455f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5546195189343460856, guid: de6d7bd08fe81b64ba77aa776de9455f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5546195189343460856, guid: de6d7bd08fe81b64ba77aa776de9455f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8376425041046541232, guid: de6d7bd08fe81b64ba77aa776de9455f, type: 3}
+      propertyPath: m_Name
+      value: Fantasma
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: de6d7bd08fe81b64ba77aa776de9455f, type: 3}
 --- !u!1001 &6219591157795484801
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3104,6 +3203,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Volador
       objectReference: {fileID: 0}
+    - target: {fileID: 9125864373595211008, guid: 96e3d7915a34a99439aa50c3ebc5d0dc, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3161,6 +3264,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Duelista
       objectReference: {fileID: 0}
+    - target: {fileID: 8603135304444839279, guid: 5e89718f0cb9b8c47970caad72c5e6ec, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3180,3 +3287,4 @@ SceneRoots:
   - {fileID: 1299343748}
   - {fileID: 1415628132}
   - {fileID: 1421817880}
+  - {fileID: 6064503007991084144}

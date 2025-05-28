@@ -23,6 +23,8 @@ public class PhantomAI : MonoBehaviour
     private bool isStunned = false;
     private bool isAttacking = false;
     private float lastAttackTime = -Mathf.Infinity;
+    
+    Animator animator;
 
     void Start()
     {
@@ -31,6 +33,7 @@ public class PhantomAI : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         initialPosition = transform.position;
         initialY = initialPosition.y; // Guardamos la altura fija
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -94,7 +97,7 @@ public class PhantomAI : MonoBehaviour
     IEnumerator PowerfulDiveAttack()
     {
         isAttacking = true;
-
+        StartCoroutine(TriggerAnimatorBool("Attack", 0.6f));
         Debug.Log("Phantom desciende en picado.");
 
         // Desactivar movimiento horizontal
@@ -149,6 +152,7 @@ public class PhantomAI : MonoBehaviour
 
     IEnumerator Stun(float seconds)
     {
+        StartCoroutine(TriggerAnimatorBool("IsHurt", 0.6f));
         isStunned = true;
         rb.linearVelocity = Vector3.zero;
         yield return new WaitForSeconds(seconds);
@@ -183,6 +187,13 @@ public class PhantomAI : MonoBehaviour
                 health.TakeDamage(stats.damage, transform.position);
             }
         }
+    }
+
+    private IEnumerator TriggerAnimatorBool(string parameter, float duration)
+    {
+        animator.SetBool(parameter, true);
+        yield return new WaitForSeconds(duration);
+        animator.SetBool(parameter, false);
     }
 
 
