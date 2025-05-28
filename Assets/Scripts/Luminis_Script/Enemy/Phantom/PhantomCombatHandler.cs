@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class PhantomCombatHandler : EnemyCombatHandler
 {
@@ -7,12 +8,20 @@ public class PhantomCombatHandler : EnemyCombatHandler
     public Transform dropSpawnPoint;
     public float dropSpread = 0.5f;
 
+    Animator animator;
+
     public override void TakeDamage(int damage, GameObject player)
     {
         if (isDead) return;
 
         stats.lifes -= damage;
         Debug.Log($"Phantom recibió {damage} de daño. Vida restante: {stats.lifes}");
+
+        if (animator != null)
+        {
+            animator.SetBool("IsHurt", true);
+            StartCoroutine(ResetOuch());
+        }
 
         PlayerStats ps = player.GetComponent<PlayerStats>();
         if (ps != null)
@@ -67,6 +76,15 @@ public class PhantomCombatHandler : EnemyCombatHandler
             }
 
             Destroy(transform.gameObject);
+        }
+    }
+
+    IEnumerator ResetOuch()
+    {
+        yield return new WaitForSeconds(0.5f); // Ajusta este tiempo según necesidad
+        if (animator != null)
+        {
+            animator.SetBool("IsHurt", false);
         }
     }
 }

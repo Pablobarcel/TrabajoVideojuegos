@@ -1,18 +1,24 @@
 using UnityEngine;
+using System.Collections;
 
 public class BossCombatHandler : EnemyCombatHandler
 {
     public GameObject coinPrefab;
     public Transform dropPoint;
     public float dropSpread = 0.5f;
+    Animator animator;
+
+    
 
     public override void TakeDamage(int damage, GameObject player)
     {
         if (isDead) return;
-
+        
+       
         stats.lifes -= damage;
         Debug.Log($"Boss recibió {damage} de daño. Vida restante: {stats.lifes}");
-
+        
+         StartCoroutine(Ouch());
         PlayerStats ps = player.GetComponent<PlayerStats>();
         if (ps != null)
         {
@@ -54,9 +60,18 @@ public class BossCombatHandler : EnemyCombatHandler
                 }
             }
 
-            // Aquí puedes invocar animaciones o efectos especiales
             Debug.Log("¡Boss derrotado!");
             Destroy(transform.gameObject);
         }
+    }
+
+    IEnumerator Ouch()
+    {
+        animator.SetBool("Ouch", true);
+        yield return new WaitForSeconds(2f); 
+        animator.SetBool("Ouch", false);
+        
+            
+        
     }
 }

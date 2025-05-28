@@ -20,12 +20,15 @@ public class BossAI : MonoBehaviour
     private float originalGravity;
     private bool isAttacking = false;
 
+    Animator animator;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         stats = GetComponent<EnemyStats>();
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         originalGravity = Physics.gravity.y;
+        animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -55,7 +58,7 @@ public class BossAI : MonoBehaviour
         if (fightStarted) return;
 
         fightStarted = true;
-        Physics.gravity = new Vector3(0, originalGravity * 0.6f, 0); // Gravedad reducida
+        Physics.gravity = new Vector3(0, originalGravity * 0.6f, 0);
         Debug.Log("¡Boss ha detectado al jugador y comienza la pelea!");
     }
 
@@ -63,8 +66,7 @@ public class BossAI : MonoBehaviour
     {
         if (player == null) return;
 
-        // Movimiento hacia la posición del jugador pero a una altura fija
-        Vector3 targetPosition = new Vector3(player.position.x, player.position.y , player.position.z);
+        Vector3 targetPosition = new Vector3(player.position.x, player.position.y, player.position.z);
         Vector3 direction = (targetPosition - transform.position).normalized;
         rb.linearVelocity = direction * patrolSpeed;
     }
@@ -73,9 +75,15 @@ public class BossAI : MonoBehaviour
     {
         isAttacking = true;
 
+         animator.SetBool("Attack", true);
+         yield return new WaitForSeconds(1f);
+    
+
         if (player == null)
         {
             isAttacking = false;
+            animator.SetBool("Attack", false);
+            
             yield break;
         }
 
@@ -89,8 +97,6 @@ public class BossAI : MonoBehaviour
                 if (bulletRb != null)
                 {
                     bulletRb.useGravity = false;
-
-                    // Dirección hacia el jugador
                     Vector3 direction = (player.position - point.position).normalized;
                     float bulletSpeed = 12f;
                     bulletRb.linearVelocity = direction * bulletSpeed;
@@ -98,17 +104,15 @@ public class BossAI : MonoBehaviour
             }
         }
 
-        // Puedes reproducir una animación o sonido aquí si lo deseas
-
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.5f);
+        animator.SetBool("Attack", false);
         isAttacking = false;
+
+        
     }
-
-
 
     void OnDestroy()
     {
-        // Restaurar gravedad al morir
         Physics.gravity = new Vector3(0, originalGravity, 0f);
     }
 
@@ -124,4 +128,7 @@ public class BossAI : MonoBehaviour
             }
         }
     }
+
+     
 }
+

@@ -10,7 +10,7 @@ public class WallmasterCombatHandler : EnemyCombatHandler
 
     private Transform player;
 
-    private void Start()
+    private void Startt()
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
         stats = GetComponentInParent<EnemyStats>();
