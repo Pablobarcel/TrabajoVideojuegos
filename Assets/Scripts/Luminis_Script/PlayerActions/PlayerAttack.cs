@@ -7,6 +7,8 @@ public class PlayerAttack : MonoBehaviour
     public KeyCode specialAttackKey = KeyCode.R;
     public LayerMask enemyLayer;
     public Transform attackOrigin;
+    public float attackRange = 2f;
+
 
     public float hardAttackHoldTime = 1.5f;
 
@@ -93,22 +95,35 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
-    void Attack()
-    {
-        float attackRange = stats.ActiveStats.attackRange;
-        int attackDamage = stats.ActiveStats.attackDamage;
-
-        Collider[] hitEnemies = Physics.OverlapSphere(attackOrigin.position, attackRange, enemyLayer);
-        foreach (Collider enemy in hitEnemies)
+     void Attack()
         {
-            EnemyCombatHandler combat = enemy.GetComponentInChildren<EnemyCombatHandler>();
-            if (combat != null)
-                combat.TakeDamage(attackDamage, gameObject);
+         Debug.Log("ATACANDO...");
+         float range = stats.ActiveStats.HardAttackRange;
+         int damage = stats.ActiveStats.attackDamage;
+         Collider[] hitEnemies = Physics.OverlapSphere(attackOrigin.position, range, enemyLayer);
+        
+
+         foreach (Collider enemy in hitEnemies)
+            {
+              Debug.Log("Impactado: " + enemy.name);
+             EnemyCombatHandler combat = enemy.GetComponentInParent<EnemyCombatHandler>();
+             if (combat != null)
+              {
+            Debug.Log("EnemyCombatHandler encontrado en: " + enemy.name);
+            combat.TakeDamage(damage, gameObject);
+             }
+              else
+              {
+            Debug.LogWarning("¡EnemyCombatHandler NO encontrado en: " + enemy.name + "!");
+             }
+         }
         }
-    }
+
 
     void HardAttack()
     {
+
+        Debug.Log("HardAttack() llamado");
         float range = stats.ActiveStats.HardAttackRange;
         int damage = stats.ActiveStats.HardAttackDamage;
 
@@ -117,10 +132,10 @@ public class PlayerAttack : MonoBehaviour
         foreach (Collider enemy in hits)
         {
             bool enemyIsRight = enemy.transform.position.x > transform.position.x;
-
+           
             if (isFacingRight == enemyIsRight)
             {
-                EnemyCombatHandler combat = enemy.GetComponentInChildren<EnemyCombatHandler>();
+                EnemyCombatHandler combat = enemy.GetComponentInParent<EnemyCombatHandler>();
                 if (combat != null)
                 {
                     combat.TakeDamage(damage, gameObject);

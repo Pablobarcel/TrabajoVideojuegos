@@ -71,12 +71,23 @@ public class EnemyMovementController : MonoBehaviour
     }
 
     void Flip()
+{
+    patrolDirection *= -1;
+
+    // Voltear solo el modelo visual, no el objeto completo
+    Transform visual = transform.Find("Enemigo2");
+    if (visual != null)
     {
-        patrolDirection *= -1;
-        Vector3 scale = transform.localScale;
+        Vector3 scale = visual.localScale;
         scale.x *= -1;
-        transform.localScale = scale;
+        visual.localScale = scale;
     }
+    else
+    {
+       // Debug.LogWarning("No se encontró el hijo 'Enemigo2' para hacer flip.");
+    }
+}
+
 
     public void SetTarget(Transform player)
     {

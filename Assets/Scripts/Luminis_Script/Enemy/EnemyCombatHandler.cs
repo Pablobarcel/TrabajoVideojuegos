@@ -37,18 +37,24 @@ public class EnemyCombatHandler : MonoBehaviour
 
     public void TakeDamage(int damage, GameObject player)
     {
+        Debug.Log("TakeDamage() desde ataque del jugador");
+
         if (isDead) return;
 
         stats.lifes -= damage;
         Debug.Log($"El enemigo ha recibido {damage} de daño. Vida restante: {stats.lifes}");
 
         // Añadir furia al jugador por impacto
+       Debug.Log("TakeDamage() llamado");
         PlayerStats playerStats = player.GetComponent<PlayerStats>();
-        if (playerStats != null)
-        {
+        if (playerStats != null){
             playerStats.AddFuria(stats.furyPerHit);
+            Debug.Log($"Furia actual: {playerStats.GetFuriaActual()}");
         }
-
+else
+{
+    Debug.LogWarning("¡No se encontró PlayerStats en el jugador!");
+}
         if (stats.lifes <= 0)
         {
             isDead = true;
@@ -63,7 +69,8 @@ public class EnemyCombatHandler : MonoBehaviour
                 ui?.UpdateMonedas(playerStats.monedas);
             }
 
-            Destroy(transform.parent.gameObject);
+            Destroy(gameObject); // Solo elimina el GameObject que tiene el script
+
         }
     }
 
