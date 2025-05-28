@@ -124,4 +124,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8cba1aa843fb0141ba8a5fe949ace92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  monedasExtra: 0
   unlockSound: {fileID: 8300000, guid: 9fcf4c157665ad645a643f02a52d5922, type: 3}
+  CanvasPrefab: {fileID: 5344691214060220774, guid: 6c8b212bf7cdc1c4fb4abc46d4e853d4, type: 3}
+  canvasDuration: 10

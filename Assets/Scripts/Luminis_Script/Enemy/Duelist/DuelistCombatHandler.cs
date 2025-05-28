@@ -14,10 +14,12 @@ public class DuelistCombatHandler : EnemyCombatHandler
 
     private Animator animator;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start(); // Esto inicializa stats en la clase padre
         animator = GetComponent<Animator>();
     }
+
 
     public override void TakeDamage(int damage, GameObject player)
     {
@@ -54,15 +56,18 @@ public class DuelistCombatHandler : EnemyCombatHandler
             
 
             PlayerHealth playerHealth = player.GetComponent<PlayerHealth>();
+            Debug.Log($"Vida del player: {playerHealth != null && !playerHealth.IsInvisible()}");
             if (playerHealth != null && !playerHealth.IsInvisible())
             {
+                Debug.Log($"El duelista ataca al jugador. {stats.damage} de daño.");
+                Debug.Log($"El duelista ataca al jugador. {transform.position} de daño.");
+
                 playerHealth.TakeDamage(stats.damage, transform.position);
             }
         }
-       
+
         StartCoroutine(TriggerAnimatorBool("Hurt", 1f));
         stats.lifes -= damage;
-        Debug.Log($"El duelista ha recibido {damage} de daño. Vida restante: {stats.lifes}");
 
         PlayerStats playerStats = player.GetComponent<PlayerStats>();
         if (playerStats != null)

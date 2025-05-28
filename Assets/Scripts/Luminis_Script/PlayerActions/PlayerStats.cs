@@ -124,4 +124,68 @@ public class PlayerStats : MonoBehaviour
     {
         return (float)furiaActual / GetMaxFuria();
     }
+
+    public void LoadGame()
+    {
+        if (!PlayerPrefs.HasKey("SaveData"))
+            return;
+
+        string json = PlayerPrefs.GetString("SaveData");
+        GameSaveData saveData = JsonUtility.FromJson<GameSaveData>(json);
+
+        currentForm = (PlayerForm)saveData.playerData.currentForm;
+        lightStats = saveData.playerData.lightStats;
+        shadowStats = saveData.playerData.shadowStats;
+
+        SetFuria(saveData.playerData.furiaActual);
+
+        dashUnlocked = saveData.playerData.dashUnlocked;
+        HardAttackUnlocked = saveData.playerData.HardAttackUnlocked;
+        SpecialAttackUnlocked = saveData.playerData.SpecialAttackUnlocked;
+        KeyUnlocked = saveData.playerData.KeyUnlocked;
+        wallJumpUnlocked = saveData.playerData.wallJumpUnlocked;
+        canChangeForm = saveData.playerData.canChangeForm;
+
+        monedas = saveData.playerData.monedas;
+
+        // Actualizar posición del jugador
+        transform.position = saveData.playerData.playerPosition;
+
+        // Actualizar monedas UI
+        PlayerCurrency playerCurrency = GetComponent<PlayerCurrency>();
+        if (playerCurrency != null)
+        {
+            playerCurrency.SetCoins(monedas);
+        }
+
+        PlayerHealth ph = GetComponent<PlayerHealth>();
+        if (ph != null)
+        {
+            ph.SetCurrentHealth(saveData.playerData.currentHealth);
+            ph.UpdateHealthOnFormChange(0);
+        }
+
+        foreach(var enemySave in saveData.enemiesData)
+        {
+            EnemyStats enemy = FindEnemyByID(enemySave.enemyID);
+            if(enemy != null)
+            {
+                enemy.currentHealth = enemySave.health;
+                enemy.transform.position = enemySave.position;
+            }
+        }
+    }
+
+
+
+    EnemyStats FindEnemyByID(string id)
+    {
+        EnemyStats[] allEnemies = FindObjectsOfType<EnemyStats>();
+        foreach(var e in allEnemies)
+        {
+            if(e.enemyID == id) return e;
+        }
+        return null;
+    }
+
 }

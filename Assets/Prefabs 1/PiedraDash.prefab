@@ -125,3 +125,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monedasExtra: 0
+  canvasPrefab: {fileID: 6562527390261715347, guid: 53965c447eb736a4ca94dcd56f53bfd5, type: 3}

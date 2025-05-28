@@ -34,6 +34,12 @@ public class PlayerCurrency : MonoBehaviour
     {
         return playerStats.monedas;
     }
+    
+    public void SetCoins(int amount)
+    {
+        playerStats.monedas = amount;
+        UpdateUI();
+    }
 
     private void UpdateUI()
     {

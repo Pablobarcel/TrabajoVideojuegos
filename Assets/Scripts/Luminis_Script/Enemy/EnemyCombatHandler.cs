@@ -8,7 +8,7 @@ public class EnemyCombatHandler : MonoBehaviour
 
     protected bool wasHitFromFront = true; // Se actualiza justo antes de TakeDamage
 
-    private void Start()
+    protected virtual void Start()
     {
         stats = GetComponentInParent<EnemyStats>();
         if (stats == null)
@@ -16,6 +16,7 @@ public class EnemyCombatHandler : MonoBehaviour
             Debug.LogError("EnemyStats no encontrado en el enemigo.");
         }
     }
+
 
     // NUEVO: se llama desde PlayerAttack para indicar la dirección del golpe
     public virtual void SetLastHitDirection(bool fromFront)

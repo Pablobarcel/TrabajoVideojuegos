@@ -115,7 +115,8 @@ public class PlayerAttack : MonoBehaviour
             {
                 bool isEnemyInFront = (enemy.transform.position.x > transform.position.x) == isFacingRight;
                 combat.SetLastHitDirection(isEnemyInFront);
-                combat.TakeDamage(attackDamage, gameObject);
+                combat.TakeDamage(attackDamage, transform.root.gameObject); // ✅ fuerza el GameObject raíz
+
             }
         }
 

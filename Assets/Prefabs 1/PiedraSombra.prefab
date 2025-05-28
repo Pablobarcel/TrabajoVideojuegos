@@ -125,3 +125,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unlockSound: {fileID: 8300000, guid: 9fcf4c157665ad645a643f02a52d5922, type: 3}
+  sombraCanvasPrefab: {fileID: 90556775879920243, guid: 337ba48ff2c64a140b940fb133d05ccb, type: 3}
+  canvasDuration: 10

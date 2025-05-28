@@ -4,6 +4,7 @@ using System.Collections;
 public class PlayerHealth : MonoBehaviour
 {
     private int currentHealth;
+    private Vector3 startPosition;
     private UIManager ui;
     private PlayerStats playerStats;
     private Rigidbody rb;
@@ -11,10 +12,13 @@ public class PlayerHealth : MonoBehaviour
 
     private bool isInvisible = false;
     private float invisibilityDuration = 3f;
-    public float knockbackForce = 1000f; // Fuerza de empuje al recibir daño
+    public float knockbackForce = 1000f;
+
+    public Bank bank; // Referencia para cargar guardado
 
     void Start()
     {
+        startPosition = transform.position;
         playerStats = GetComponent<PlayerStats>();
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
@@ -31,6 +35,15 @@ public class PlayerHealth : MonoBehaviour
             Debug.LogError("UIManager not found in scene.");
         }
 
+        if (bank == null)
+        {
+            bank = FindObjectOfType<Bank>();
+            if (bank == null)
+            {
+                Debug.LogError("No se encontró el objeto Bank en la escena.");
+            }
+        }
+
         InitializeHealth();
     }
 
@@ -40,21 +53,20 @@ public class PlayerHealth : MonoBehaviour
         ui?.UpdateVida(currentHealth);
     }
 
-    // Modificado para recibir posición del daño y aplicar knockback + invisibilidad
     public void TakeDamage(int damage, Vector3 damageSourcePosition)
     {
         if (isInvisible)
-            return; // No recibe daño si está invisible
+            return;
 
         currentHealth -= damage;
         if (currentHealth < 0) currentHealth = 0;
 
         ui?.UpdateVida(currentHealth);
-        
+
         StartCoroutine(BecomeInvisible());
         ApplyKnockback(damageSourcePosition);
         StartCoroutine(Ouch());
-        
+
         if (currentHealth <= 0)
         {
             Die();
@@ -65,7 +77,6 @@ public class PlayerHealth : MonoBehaviour
     {
         if (rb == null) return;
 
-        // Resetear velocidad del jugador
         rb.linearVelocity = Vector3.zero;
 
         Vector3 knockbackDir = (transform.position - damageSourcePosition).normalized;
@@ -76,27 +87,22 @@ public class PlayerHealth : MonoBehaviour
         rb.AddForce(knockback, ForceMode.Impulse);
     }
 
-
     private IEnumerator BecomeInvisible()
     {
-        
         isInvisible = true;
         yield return new WaitForSeconds(0.1f);
 
         int originalLayer = gameObject.layer;
         gameObject.layer = LayerMask.NameToLayer("InvisibleToEnemies");
 
-        // Efecto visual opcional
         Renderer renderer = GetComponentInChildren<Renderer>();
         if (renderer != null)
-            renderer.material.color = new Color(1, 1, 1, 0.4f); // semitransparente
+            renderer.material.color = new Color(1, 1, 1, 0.4f);
 
         yield return new WaitForSeconds(invisibilityDuration);
 
-        // Restaurar layer original
         gameObject.layer = originalLayer;
 
-        // Restaurar efecto visual
         if (renderer != null)
             renderer.material.color = new Color(1, 1, 1, 1f);
 
@@ -105,13 +111,10 @@ public class PlayerHealth : MonoBehaviour
 
     public IEnumerator Ouch()
     {
-        animator.SetBool("Damage",true);
+        animator.SetBool("Damage", true);
         yield return new WaitForSeconds(0.3f);
-        animator.SetBool("Damage",false);
+        animator.SetBool("Damage", false);
     }
-
-
-
 
     public bool IsInvisible()
     {
@@ -120,14 +123,48 @@ public class PlayerHealth : MonoBehaviour
 
     void Die()
     {
-       
         Debug.Log("Jugador ha muerto.");
-        // Reiniciar nivel, mostrar animación, etc.
+
+        StopAllCoroutines();
+
+        animator.SetBool("Damage", false);
+
+        // Cargar datos guardados usando el método LoadGame() ya definido en playerStats
+        if (bank != null)
+        {
+            bank.LoadGame();
+            transform.position = playerStats.transform.position; // opcional si quieres mover al jugador al lugar guardado
+        }
+        else
+        {
+            // Si no hay bank, comportamiento por defecto
+            transform.position = startPosition;
+            currentHealth = playerStats.ActiveStats.vidas;
+            ui?.UpdateVida(currentHealth);
+
+            if (rb != null)
+            {
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+
+            isInvisible = false;
+            gameObject.layer = LayerMask.NameToLayer("Default");
+            Renderer renderer = GetComponentInChildren<Renderer>();
+            if (renderer != null)
+                renderer.material.color = new Color(1, 1, 1, 1f);
+        }
     }
 
     public int GetHealth()
     {
         return currentHealth;
+    }
+
+    public void SetCurrentHealth(int health)
+    {
+        currentHealth = health;
+        ui?.UpdateVida(currentHealth);
     }
 
     public void UpdateHealthOnFormChange(int oldMaxHealth)
@@ -144,6 +181,4 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = Mathf.Min(currentHealth, playerStats.ActiveStats.vidas);
         ui?.UpdateVida(currentHealth);
     }
-
-
 }

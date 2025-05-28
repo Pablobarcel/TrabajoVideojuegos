@@ -125,3 +125,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monedasExtra: 0
+  unlockSound: {fileID: 0}
+  CanvasPrefab: {fileID: 138314024186007968, guid: 3aae7829a44e6494099b4391be12a567, type: 3}
+  canvasDuration: 10

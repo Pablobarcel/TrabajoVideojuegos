@@ -13,9 +13,18 @@ public class EnemyStats : MonoBehaviour
 
     [Header("Vidas")]
     public int lifes = 2;
+    public int currentHealth;
 
     [Header("Furia")]
     public int furyRewardOnDeath = 25;
     public int furyPerHit = 5;
+
+    [Header("ID")]
+    public string enemyID;
+
+    void Start()
+    {
+        currentHealth = lifes;
+    }
 
 }
