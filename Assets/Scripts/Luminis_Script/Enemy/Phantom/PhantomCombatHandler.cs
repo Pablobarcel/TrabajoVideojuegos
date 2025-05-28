@@ -66,7 +66,7 @@ public class PhantomCombatHandler : EnemyCombatHandler
                 }
             }
 
-            Destroy(transform.parent.gameObject);
+            Destroy(transform.gameObject);
         }
     }
 }

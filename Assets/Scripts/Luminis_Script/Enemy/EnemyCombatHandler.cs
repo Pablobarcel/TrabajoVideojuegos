@@ -51,7 +51,7 @@ public class EnemyCombatHandler : MonoBehaviour
                 ui?.UpdateMonedas(playerStats.monedas);
             }
 
-            Destroy(transform.parent.gameObject);
+            Destroy(transform.gameObject);
         }
     }
 

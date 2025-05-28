@@ -123,7 +123,7 @@ public class DuelistCombatHandler : EnemyCombatHandler
                 }
             }
 
-            Destroy(transform.parent.gameObject);
+            Destroy(transform.gameObject);
         }
     }
 

@@ -82,7 +82,7 @@ public class WallmasterCombatHandler : EnemyCombatHandler
                 }
             }
             Destroy(wallPrefab);
-            Destroy(transform.parent.gameObject);
+            Destroy(transform.gameObject);
         }
     }
 }
