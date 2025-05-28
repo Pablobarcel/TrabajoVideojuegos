@@ -10,21 +10,35 @@ public class Chest : MonoBehaviour, IInteractable
     public GameObject healingItemPrefab;
     public Transform spawnPoint;
     public float spread = 0.5f;
-    Animator animator;
+
+    public AudioClip openSound; // 🎧 Clip de sonido de apertura
+    private AudioSource audioSource;
 
     private Renderer rend;
+    private Animator animator;
 
     private void Start()
     {
         rend = GetComponent<Renderer>();
         animator = GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void Interact()
     {
         if (isOpened || reward == null) return;
         isOpened = true;
-        animator.SetBool("Open",true);
+
+        // 🎧 Reproducir sonido
+        if (audioSource != null && openSound != null)
+        {
+            audioSource.PlayOneShot(openSound);
+        }
+
+        if (animator != null)
+        {
+            animator.SetBool("Open", true);
+        }
 
         GameObject player = GameObject.FindGameObjectWithTag("Player");
 
@@ -48,7 +62,7 @@ public class Chest : MonoBehaviour, IInteractable
         {
             for (int i = 0; i < reward.healingItemsToSpawn; i++)
             {
-                Vector3 offset = new Vector3(Random.Range(-spread, spread), 0.5f,0);
+                Vector3 offset = new Vector3(Random.Range(-spread, spread), 0.5f, 0);
                 GameObject heal = Instantiate(healingItemPrefab, spawnPoint.position + offset, Quaternion.identity);
                 HealingItem healScript = heal.GetComponent<HealingItem>();
                 if (healScript != null)

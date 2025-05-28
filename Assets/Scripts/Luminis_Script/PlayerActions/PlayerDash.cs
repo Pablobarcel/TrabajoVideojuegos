@@ -66,6 +66,7 @@ public class PlayerDash : MonoBehaviour
 
     void StartDash(int direction, float dashForce, float dashDuration)
     {
+        GetComponent<PlayerSFX>()?.PlayDash();
         isDashing = true;
         dashEndTime = Time.time + dashDuration;
         lastDashTime = Time.time;

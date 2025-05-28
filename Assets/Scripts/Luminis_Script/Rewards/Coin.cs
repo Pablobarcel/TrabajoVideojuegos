@@ -5,6 +5,10 @@ public class Coin : MonoBehaviour
     private Transform target;
     public float moveSpeed = 5f;
 
+    [Header("Pickup Sound")]
+    public AudioClip pickupSound;
+    public float destroyDelay = 0.05f;
+
     public void SetTarget(Transform player)
     {
         target = player;
@@ -28,7 +32,13 @@ public class Coin : MonoBehaviour
                 currency.AddCoins(1);
             }
 
-            Destroy(gameObject); // Destruir la moneda al recogerla
+            // 🎧 Reproducir sonido al recoger moneda
+            if (pickupSound != null)
+            {
+                AudioSource.PlayClipAtPoint(pickupSound, transform.position);
+            }
+
+            Destroy(gameObject, destroyDelay); // Retraso opcional para que el sonido se reproduzca
         }
     }
 }
