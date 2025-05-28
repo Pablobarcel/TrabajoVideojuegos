@@ -102,6 +102,7 @@ public class PlayerAttack : MonoBehaviour
 
     IEnumerator Attack()
     {
+        GetComponent<PlayerSFX>()?.PlayAttack();
         animator.SetBool("WeakAttack", true);
 
         float attackRange = stats.ActiveStats.attackRange;
@@ -126,6 +127,7 @@ public class PlayerAttack : MonoBehaviour
 
     IEnumerator HardAttack()
     {
+        GetComponent<PlayerSFX>()?.PlayHardAttack();
         animator.SetBool("HeavyAttack", true);
 
         float range = stats.ActiveStats.HardAttackRange;
@@ -159,8 +161,12 @@ public class PlayerAttack : MonoBehaviour
 
     IEnumerator PerformSpecialAttack()
     {
+        GetComponent<PlayerSFX>()?.PlaySpecialAttack();
         float range = stats.ActiveStats.SpecialAttackRange;
         int damage = stats.ActiveStats.SpecialAttackDamage;
+       
+
+
 
         Collider[] enemies = Physics.OverlapSphere(transform.position, range, enemyLayer);
         Debug.Log($"Especial golpea a {enemies.Length} enemigos.");

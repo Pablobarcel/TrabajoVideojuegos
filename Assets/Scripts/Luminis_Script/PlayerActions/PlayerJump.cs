@@ -18,6 +18,7 @@ public class PlayerJump : MonoBehaviour
 
     void Start()
     {
+        
         rb = GetComponent<Rigidbody>();
         wallJumpScript = GetComponent<PlayerWallJump>();
         stats = GetComponent<PlayerStats>();
@@ -60,6 +61,7 @@ public class PlayerJump : MonoBehaviour
 
     void Jump()
     {
+        GetComponent<PlayerSFX>()?.PlayJump();
         float jumpForce = stats.ActiveStats.jumpForce;
 
         Vector3 jumpVelocity = rb.linearVelocity;

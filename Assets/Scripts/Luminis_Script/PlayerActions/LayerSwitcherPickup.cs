@@ -4,13 +4,15 @@ public class LayerSwitcherPickup : MonoBehaviour
 {
     public int monedasExtra = 0;
     public AudioClip unlockSound;
-    public GameObject CanvasPrefab; // Asigna el prefab en el Inspector
+    public GameObject CanvasPrefab;
     public float canvasDuration = 10f;
+    public float destroyDelay = 0.1f; // Para permitir que el sonido se escuche
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
+            // ✅ Habilitar cambio de capa
             PlayerLayerSwitcher switcher = other.GetComponent<PlayerLayerSwitcher>();
             if (switcher != null)
             {
@@ -18,25 +20,26 @@ public class LayerSwitcherPickup : MonoBehaviour
                 Debug.Log("¡Recogiste el artefacto de cambio de capas!");
             }
 
-            if (unlockSound)
-                {
-                    AudioSource.PlayClipAtPoint(unlockSound, transform.position);
-                }
+            // 🎧 Reproducir sonido de desbloqueo
+            if (unlockSound != null)
+            {
+                AudioSource.PlayClipAtPoint(unlockSound, transform.position);
+            }
 
-                // Muestra el Canvas si está asignado
-                if (CanvasPrefab != null)
-                {
-                    GameObject canvas = Instantiate(CanvasPrefab);
+            // 🖼️ Mostrar Canvas informativo
+            if (CanvasPrefab != null)
+            {
+                GameObject canvas = Instantiate(CanvasPrefab);
 
-                    // Colocarlo frente a la cámara si es World Space
-                    canvas.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 2f;
-                    canvas.transform.rotation = Quaternion.LookRotation(canvas.transform.position - Camera.main.transform.position);
-                    canvas.transform.localScale = Vector3.one * 0.01f; // Ajusta si se ve muy grande
+                canvas.transform.position = Camera.main.transform.position + Camera.main.transform.forward * 2f;
+                canvas.transform.rotation = Quaternion.LookRotation(canvas.transform.position - Camera.main.transform.position);
+                canvas.transform.localScale = Vector3.one * 0.01f;
 
-                    Destroy(canvas, canvasDuration);
-                }
+                Destroy(canvas, canvasDuration);
+            }
 
-            Destroy(gameObject); // Destruir el objeto recolectable
+            // 🕑 Destruir el objeto después de un pequeño retraso (para permitir que el sonido suene)
+            Destroy(gameObject, destroyDelay);
         }
     }
 }
