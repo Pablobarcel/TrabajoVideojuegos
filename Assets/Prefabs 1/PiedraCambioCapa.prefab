@@ -128,3 +128,4 @@ MonoBehaviour:
   unlockSound: {fileID: 0}
   CanvasPrefab: {fileID: 8511440581415598383, guid: d765e23ce1ab8d34da488c9f55f66dfb, type: 3}
   canvasDuration: 10
+  destroyDelay: 0.1

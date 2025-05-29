@@ -207,13 +207,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c96cf0a57aa0cb042ace779c49ce8920, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 1
+  damage: 2
   coinReward: 200
   patrolSpeed: 3
   chaseSpeed: 8
-  lifes: 2
+  lifes: 25
   currentHealth: 0
-  furyRewardOnDeath: 25
+  furyRewardOnDeath: 50
   furyPerHit: 5
   enemyID: 
 --- !u!114 &6090820344628529736
@@ -245,7 +245,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fb82afeb47b2f142974efdc9658d988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wallPositions: []
+  wallPositions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   jumpForce: 200
   chargeForce: 300
   decisionCooldown: 3

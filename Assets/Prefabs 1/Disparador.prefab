@@ -227,9 +227,11 @@ MonoBehaviour:
   coinReward: 5
   patrolSpeed: 0
   chaseSpeed: 0
-  lifes: 2
-  furyRewardOnDeath: 25
-  furyPerHit: 5
+  lifes: 5
+  currentHealth: 0
+  furyRewardOnDeath: 5
+  furyPerHit: 1
+  enemyID: 
 --- !u!114 &75547556217148022
 MonoBehaviour:
   m_ObjectHideFlags: 0

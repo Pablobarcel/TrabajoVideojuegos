@@ -227,7 +227,7 @@ MonoBehaviour:
   coinReward: 5
   patrolSpeed: 3
   chaseSpeed: 8
-  lifes: 2
+  lifes: 3
   currentHealth: 0
   furyRewardOnDeath: 25
   furyPerHit: 5
