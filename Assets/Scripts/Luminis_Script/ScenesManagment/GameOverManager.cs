@@ -1,25 +1,30 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameOverManager : MonoBehaviour
 {
-    public GameObject gameOverCanvas; // El canvas que muestras
+    public GameObject gameOverCanvas;
 
     private bool isGameOver = false;
 
-    // Llamar a este método para activar el Game Over
     public void TriggerGameOver()
     {
         if (isGameOver) return;
 
         isGameOver = true;
-        Time.timeScale = 0f; // Pausar el juego
+        Time.timeScale = 0f;
         gameOverCanvas.SetActive(true);
     }
 
-    // Opcional: para reiniciar el juego
     public void RestartGame()
     {
-        Time.timeScale = 1f; // Reanudar tiempo
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+        Time.timeScale = 1f;
+        gameOverCanvas.SetActive(false);
+    }
+
+    public void GoToMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
     }
 }

@@ -13,6 +13,7 @@ public class PlayerHealth : MonoBehaviour
     private bool isInvisible = false;
     private float invisibilityDuration = 3f;
     public float knockbackForce = 1000f;
+    public GameOverManager gameOverManager;
 
     public Bank bank; // Referencia para cargar guardado
 
@@ -69,6 +70,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            gameOverManager.TriggerGameOver();
             Die();
         }
     }
