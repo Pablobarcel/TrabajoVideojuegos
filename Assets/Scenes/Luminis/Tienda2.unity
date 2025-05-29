@@ -266,6 +266,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4342107482832441276, guid: 64ac62cf137af8842a2ce8bdc44273bc, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342107482832441276, guid: 64ac62cf137af8842a2ce8bdc44273bc, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342107482832441276, guid: 64ac62cf137af8842a2ce8bdc44273bc, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342107482832441276, guid: 64ac62cf137af8842a2ce8bdc44273bc, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342107482832441276, guid: 64ac62cf137af8842a2ce8bdc44273bc, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 203
+      objectReference: {fileID: 0}
+    - target: {fileID: 4342107482832441276, guid: 64ac62cf137af8842a2ce8bdc44273bc, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -79
+      objectReference: {fileID: 0}
     - target: {fileID: 8572013382006194988, guid: 64ac62cf137af8842a2ce8bdc44273bc, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1750,6 +1774,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5849523}
     m_Modifications:
+    - target: {fileID: 374085831059727744, guid: 4b78e9b60397a8545a44cb04b6c30990, type: 3}
+      propertyPath: m_text
+      value: "Poci\xF3n Curativa Peque\xF1a              "
+      objectReference: {fileID: 0}
+    - target: {fileID: 374085831059727744, guid: 4b78e9b60397a8545a44cb04b6c30990, type: 3}
+      propertyPath: m_margin.z
+      value: -212.22414
+      objectReference: {fileID: 0}
     - target: {fileID: 1507808405212320382, guid: 4b78e9b60397a8545a44cb04b6c30990, type: 3}
       propertyPath: m_Name
       value: TiendaCanvas
@@ -1757,6 +1789,22 @@ PrefabInstance:
     - target: {fileID: 1507808405212320382, guid: 4b78e9b60397a8545a44cb04b6c30990, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1564935266192568869, guid: 4b78e9b60397a8545a44cb04b6c30990, type: 3}
+      propertyPath: m_text
+      value: "Poci\xF3n Curativa Mediana                   "
+      objectReference: {fileID: 0}
+    - target: {fileID: 1564935266192568869, guid: 4b78e9b60397a8545a44cb04b6c30990, type: 3}
+      propertyPath: m_margin.z
+      value: -198.95038
+      objectReference: {fileID: 0}
+    - target: {fileID: 1950093372850365455, guid: 4b78e9b60397a8545a44cb04b6c30990, type: 3}
+      propertyPath: m_text
+      value: "Poci\xF3n Curativa Grande"
+      objectReference: {fileID: 0}
+    - target: {fileID: 1950093372850365455, guid: 4b78e9b60397a8545a44cb04b6c30990, type: 3}
+      propertyPath: m_margin.z
+      value: -184.83879
       objectReference: {fileID: 0}
     - target: {fileID: 3315365660747082345, guid: 4b78e9b60397a8545a44cb04b6c30990, type: 3}
       propertyPath: m_Pivot.x
