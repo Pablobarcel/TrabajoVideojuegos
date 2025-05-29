@@ -19,21 +19,32 @@ public class FlyingShooterEnemy : MonoBehaviour
     private float directionChangeTimer;
 
     private Animator animator;
+    private Camera mainCamera;
 
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        stats = GetComponent<EnemyStats>();
-        shootTimer = shootCooldown;
-        directionChangeTimer = directionChangeInterval;
-        animator = GetComponent<Animator>();
+    private Vector3 originalScale;
 
-        SetRandomDirection();
-    }
+    
 
-    void Update()
+    private void Start()
+{
+    rb = GetComponent<Rigidbody>();
+    stats = GetComponent<EnemyStats>();
+    animator = GetComponent<Animator>();
+    mainCamera = Camera.main;
+
+    shootTimer = shootCooldown;
+    directionChangeTimer = directionChangeInterval;
+
+    originalScale = transform.localScale; // ← Guardamos la escala original
+    SetRandomDirection();
+}
+
+    private void Update()
     {
         if (rb == null || stats == null) return;
+
+        // Always face the camera
+        FaceCamera();
 
         if (PlayerInRange())
         {
@@ -52,20 +63,25 @@ public class FlyingShooterEnemy : MonoBehaviour
         }
     }
 
-    void Patrol()
+    private void Patrol()
+{
+    directionChangeTimer -= Time.deltaTime;
+
+    if (directionChangeTimer <= 0f)
     {
-        directionChangeTimer -= Time.deltaTime;
-
-        if (directionChangeTimer <= 0f)
-        {
-            SetRandomDirection();
-            directionChangeTimer = directionChangeInterval;
-        }
-
-        rb.linearVelocity = moveDirection * stats.patrolSpeed;
+        SetRandomDirection();
+        directionChangeTimer = directionChangeInterval;
     }
 
-    void SetRandomDirection()
+    rb.linearVelocity = moveDirection * stats.patrolSpeed;
+
+    // Flip sprite horizontalmente sin alterar la escala original
+    if (moveDirection.x < 0)
+        transform.localScale = new Vector3(-Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+    else if (moveDirection.x > 0)
+        transform.localScale = new Vector3(Mathf.Abs(originalScale.x), originalScale.y, originalScale.z);
+}
+    private void SetRandomDirection()
     {
         Vector3 newDirection;
         do
@@ -73,14 +89,12 @@ public class FlyingShooterEnemy : MonoBehaviour
             float x = Random.Range(-1f, 1f);
             float y = Random.Range(-0.5f, 0.5f);
             newDirection = new Vector3(x, y, 0f).normalized;
-        } while (newDirection == Vector3.zero); // Evita vector nulo
-        
+        } while (newDirection == Vector3.zero);
 
         moveDirection = newDirection;
-        transform.rotation = Quaternion.LookRotation(moveDirection);
     }
 
-    bool PlayerInRange()
+    private bool PlayerInRange()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (!player) return false;
@@ -89,7 +103,7 @@ public class FlyingShooterEnemy : MonoBehaviour
         return distance <= detectionRange;
     }
 
-    void Shoot()
+    private void Shoot()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (!player) return;
@@ -98,7 +112,6 @@ public class FlyingShooterEnemy : MonoBehaviour
         Vector3 direction = (player.transform.position - firePoint.position).normalized;
         bullet.GetComponent<Rigidbody>().linearVelocity = direction * 10f;
 
-        // Activar animación de ataque
         StartCoroutine(TriggerAnimation("Attack", 1f));
     }
 
@@ -112,17 +125,15 @@ public class FlyingShooterEnemy : MonoBehaviour
                 health.TakeDamage(stats.damage, transform.position);
             }
 
-            // Activar animación de daño
             StartCoroutine(TriggerAnimation("IsHurt", 0.5f));
         }
         else
         {
-            SetRandomDirection(); // Cambia dirección en cualquier otra colisión
-            SetRandomDirection();// Cambia dirección en cualquier otra colisión
+            SetRandomDirection(); // Change direction on collision
         }
     }
 
-    IEnumerator TriggerAnimation(string param, float duration)
+    private IEnumerator TriggerAnimation(string param, float duration)
     {
         if (animator != null)
         {
@@ -132,4 +143,12 @@ public class FlyingShooterEnemy : MonoBehaviour
         }
     }
 
+    private void FaceCamera()
+    {
+        if (mainCamera != null)
+        {
+            Vector3 cameraForward = mainCamera.transform.forward;
+            transform.forward = new Vector3(cameraForward.x, cameraForward.y, cameraForward.z);
+        }
+    }
 }
